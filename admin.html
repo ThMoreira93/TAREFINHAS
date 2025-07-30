@@ -102,6 +102,10 @@
       line-height: 1.5;
     }
     
+    .hidden {
+      display: none !important;
+    }
+    
     /* Tela de Login */
     .login-container {
       display: flex;
@@ -271,6 +275,18 @@
       min-height: 100vh;
     }
     
+    /* Overlay para mobile */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 99;
+    }
+    
     /* Barra lateral */
     .sidebar {
       width: 280px;
@@ -317,10 +333,6 @@
     }
     
     .nav-item {
-      list-style: none;
-    }
-    
-    .nav-item a {
       display: flex;
       align-items: center;
       padding: 1rem 1.5rem;
@@ -328,15 +340,20 @@
       text-decoration: none;
       transition: all var(--transition-speed) ease;
       font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
     }
     
-    .nav-item a:hover {
+    .nav-item:hover {
       background-color: rgba(255, 255, 255, 0.1);
       color: white;
       transform: translateX(5px);
     }
     
-    .nav-item.active a {
+    .nav-item.active {
       background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
       color: white;
       border-left: 4px solid var(--primary-300);
@@ -418,6 +435,25 @@
       margin-right: 0.5rem;
     }
     
+    /* Botão de menu mobile */
+    .mobile-menu-btn {
+      display: none;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: 0.75rem;
+      cursor: pointer;
+      font-size: 1.2rem;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-speed) ease;
+    }
+    
+    .mobile-menu-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
     /* Conteúdo principal */
     .main-content {
       flex: 1;
@@ -436,6 +472,8 @@
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-md);
       border: 2px solid var(--primary-100);
+      flex-wrap: wrap;
+      gap: 1rem;
     }
     
     .page-title h2 {
@@ -592,6 +630,49 @@
       margin-bottom: 2rem;
     }
     
+    /* Filtros */
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: white;
+      padding: 1.5rem;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      border: 2px solid var(--primary-100);
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .filter-label {
+      font-weight: 600;
+      color: var(--neutral-700);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-family: 'Fredoka', cursive;
+    }
+    
+    .filter-control {
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--primary-200);
+      border-radius: var(--radius-lg);
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: white;
+      color: var(--neutral-800);
+      transition: all var(--transition-speed) ease;
+      outline: none;
+    }
+    
+    .filter-control:focus {
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+    }
+    
     /* Tabelas */
     .table-responsive {
       overflow-x: auto;
@@ -655,42 +736,6 @@
       color: white;
     }
     
-    /* Filtros */
-    .filters {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-    
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      min-width: 200px;
-    }
-    
-    .filter-label {
-      font-weight: 600;
-      color: var(--neutral-700);
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-      font-family: 'Fredoka', cursive;
-    }
-    
-    .filter-control {
-      padding: 0.75rem 1rem;
-      border: 2px solid var(--primary-200);
-      border-radius: var(--radius-lg);
-      font-size: 0.9rem;
-      background: white;
-      transition: all var(--transition-speed) ease;
-    }
-    
-    .filter-control:focus {
-      border-color: var(--primary-500);
-      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
-    }
-    
     /* Modal */
     .modal {
       display: none;
@@ -701,39 +746,26 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
     }
     
     .modal-content {
       background-color: white;
       margin: 5% auto;
-      padding: 2rem;
+      padding: 0;
       border-radius: var(--radius-2xl);
       width: 90%;
       max-width: 500px;
       box-shadow: var(--shadow-xl);
       border: 3px solid var(--primary-100);
-      animation: modalSlideIn 0.3s ease;
-    }
-    
-    @keyframes modalSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-50px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
     
     .modal-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 2px solid var(--primary-100);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--primary-100);
+      background: linear-gradient(135deg, var(--primary-50), white);
     }
     
     .modal-title {
@@ -741,6 +773,7 @@
       font-size: 1.5rem;
       font-weight: 600;
       color: var(--neutral-800);
+      margin: 0;
     }
     
     .close {
@@ -755,116 +788,85 @@
       color: var(--error);
     }
     
+    .modal-body {
+      padding: 2rem;
+    }
+    
+    .modal-footer {
+      padding: 1.5rem 2rem;
+      border-top: 2px solid var(--primary-100);
+      background: linear-gradient(135deg, white, var(--primary-50));
+    }
+    
     /* Notificações */
     .notification-container {
       position: fixed;
-      top: 2rem;
-      right: 2rem;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      top: 20px;
+      right: 20px;
+      z-index: 1001;
     }
     
     .notification {
-      display: flex;
-      align-items: center;
-      padding: 1rem 1.5rem;
+      background: white;
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-lg);
-      background-color: white;
-      max-width: 350px;
-      animation: slideIn 0.3s ease forwards;
-      border-left: 4px solid var(--primary-500);
-    }
-    
-    .notification-hiding {
-      animation: slideOut 0.3s ease forwards;
+      margin-bottom: 1rem;
+      padding: 1rem 1.5rem;
+      border-left: 4px solid;
+      display: flex;
+      align-items: center;
+      min-width: 300px;
+      animation: slideIn 0.3s ease;
     }
     
     @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
     
-    @keyframes slideOut {
-      from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(100%); opacity: 0; }
+    .notification.success {
+      border-left-color: var(--success);
     }
     
-    .notification-icon {
-      margin-right: 1rem;
-      font-size: 1.5rem;
+    .notification.error {
+      border-left-color: var(--error);
     }
     
-    .notification-content {
-      flex: 1;
+    .notification.warning {
+      border-left-color: var(--warning);
     }
     
-    .notification-title {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-      font-size: 0.9rem;
+    .notification.info {
+      border-left-color: var(--info);
     }
     
-    .notification-message {
-      font-size: 0.8rem;
-      color: var(--neutral-600);
+    /* Seções */
+    .section {
+      display: none;
     }
     
-    .notification-close {
-      background: none;
-      border: none;
-      color: var(--neutral-500);
-      cursor: pointer;
-      padding: 0.25rem;
-      margin-left: 1rem;
-      font-size: 1.2rem;
+    .section.active {
+      display: block;
     }
     
-    .notification-success .notification-icon {
-      color: var(--success);
-    }
-    
-    .notification-error .notification-icon {
-      color: var(--error);
-    }
-    
-    .notification-warning .notification-icon {
-      color: var(--warning);
-    }
-    
-    .notification-info .notification-icon {
-      color: var(--info);
-    }
-    
-    /* Loading */
-    .loading {
-      display: inline-block;
-      width: 2rem;
-      height: 2rem;
-      border: 3px solid var(--primary-200);
-      border-top: 3px solid var(--primary-500);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    /* Responsive Design */
+    /* Responsividade */
     @media (max-width: 768px) {
       .sidebar {
-        width: 280px;
         transform: translateX(-100%);
-        position: fixed;
-        z-index: 1000;
       }
       
       .sidebar.open {
         transform: translateX(0);
+      }
+      
+      .sidebar-overlay.active {
+        display: block;
       }
       
       .main-content {
@@ -872,50 +874,14 @@
         padding: 1rem;
       }
       
+      .mobile-menu-btn {
+        display: block;
+      }
+      
       .content-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
-        position: relative;
-      }
-      
-      .mobile-menu-btn {
-        display: block;
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        background: var(--primary-500);
-        color: white;
-        border: none;
-        border-radius: var(--radius-lg);
-        padding: 0.75rem;
-        font-size: 1.2rem;
-        cursor: pointer;
-        box-shadow: var(--shadow-md);
-        z-index: 1001;
-      }
-      
-      .mobile-menu-btn:hover {
-        background: var(--primary-600);
-      }
-      
-      .sidebar-overlay {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        opacity: 0;
-        visibility: hidden;
-        transition: all var(--transition-speed) ease;
-      }
-      
-      .sidebar-overlay.active {
-        opacity: 1;
-        visibility: visible;
       }
       
       .kpi-cards {
@@ -927,32 +893,15 @@
       }
       
       .filters {
-        flex-direction: column;
+        grid-template-columns: 1fr;
       }
       
-      .filter-group {
-        min-width: auto;
+      .table-responsive {
+        font-size: 0.8rem;
       }
       
-      .nav-item a {
-        padding: 1.25rem 1.5rem;
-        font-size: 1.1rem;
-      }
-      
-      .nav-item i {
-        font-size: 1.3rem;
-        margin-right: 1.25rem;
-      }
-    }
-    
-    /* Desktop - esconder botão mobile */
-    @media (min-width: 769px) {
-      .mobile-menu-btn {
-        display: none;
-      }
-      
-      .sidebar-overlay {
-        display: none;
+      .table th, .table td {
+        padding: 0.5rem;
       }
     }
     
@@ -979,10 +928,6 @@
       50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
       100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
     }
-    
-    .hidden {
-      display: none !important;
-    }
 </style>
 </head>
 <body>
@@ -992,10 +937,10 @@
   <div class="login-card">
     <div class="login-header">
       <div class="login-icon sparkle">
-        <i class="fas fa-crown" style="font-size: 40px; color: white;"></i>
+        <i class="fas fa-star" style="font-size: 40px; color: white;"></i>
       </div>
-      <h1 class="login-title">Minhas Tarefinhas</h1>
-      <p class="login-subtitle">Painel Administrativo</p>
+      <h1 class="login-title">Painel Admin</h1>
+      <p class="login-subtitle">Acesso ao sistema administrativo</p>
     </div>
     
     <form onsubmit="fazerLogin(event)">
@@ -1035,26 +980,26 @@
     </div>
     
     <nav class="sidebar-nav">
-      <a href="#" class="nav-item active" onclick="mostrarSecao('dashboard'); fecharMenuMobile();">
+      <button class="nav-item active" onclick="mostrarSecao('dashboard')">
         <i class="fas fa-chart-pie"></i>
         <span>Dashboard</span>
-      </a>
-      <a href="#" class="nav-item" onclick="mostrarSecao('ordens'); fecharMenuMobile();">
+      </button>
+      <button class="nav-item" onclick="mostrarSecao('ordens')">
         <i class="fas fa-list-alt"></i>
         <span>Ordens de Serviço</span>
-      </a>
-      <a href="#" class="nav-item" onclick="mostrarSecao('gerenciar-tarefas'); fecharMenuMobile();">
+      </button>
+      <button class="nav-item" onclick="mostrarSecao('gerenciar-tarefas')">
         <i class="fas fa-tasks"></i>
         <span>Gerenciar Tarefas</span>
-      </a>
-      <a href="#" class="nav-item" onclick="mostrarSecao('colaboradores'); fecharMenuMobile();">
+      </button>
+      <button class="nav-item" onclick="mostrarSecao('colaboradores')">
         <i class="fas fa-users"></i>
         <span>Colaboradores</span>
-      </a>
-      <a href="#" class="nav-item" onclick="mostrarSecao('relatorios'); fecharMenuMobile();">
+      </button>
+      <button class="nav-item" onclick="mostrarSecao('relatorios')">
         <i class="fas fa-file-alt"></i>
         <span>Relatórios</span>
-      </a>
+      </button>
     </nav>
     
     <div class="sidebar-footer">
@@ -1075,7 +1020,7 @@
   <!-- Conteúdo principal -->
   <div class="main-content">
     <!-- Dashboard -->
-    <div id="dashboard-section" class="section">
+    <div id="dashboard-section" class="section active">
       <div class="content-header">
         <!-- Botão de menu mobile -->
         <button class="mobile-menu-btn" onclick="abrirMenuMobile()">
@@ -1184,8 +1129,12 @@
     </div>
     
     <!-- Ordens de Serviço -->
-    <div id="ordens-section" class="section hidden">
+    <div id="ordens-section" class="section">
       <div class="content-header">
+        <button class="mobile-menu-btn" onclick="abrirMenuMobile()">
+          <i class="fas fa-bars"></i>
+        </button>
+        
         <div class="page-title">
           <h2><i class="fas fa-tasks"></i> Ordens de Serviço</h2>
           <div class="breadcrumb">Painel Principal / Ordens de Serviço</div>
@@ -1263,224 +1212,247 @@
     </div>
 
     <!-- Seção Gerenciar Tarefas -->
-    <div id="gerenciar-tarefas" class="content-section" style="display: none;">
-      <div class="section-header">
-        <h2><i class="fas fa-tasks"></i> Gerenciar Tarefas</h2>
-        <p class="breadcrumb">Painel Principal / Gerenciar Tarefas</p>
+    <div id="gerenciar-tarefas-section" class="section">
+      <div class="content-header">
+        <button class="mobile-menu-btn" onclick="abrirMenuMobile()">
+          <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="page-title">
+          <h2><i class="fas fa-tasks"></i> Gerenciar Tarefas</h2>
+          <div class="breadcrumb">Painel Principal / Gerenciar Tarefas</div>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-info" onclick="carregarTarefasGerenciar()">
+            <i class="fas fa-sync-alt"></i> Atualizar
+          </button>
+        </div>
       </div>
 
       <!-- Filtros -->
-      <div class="filters-container" style="background: white; padding: 1.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); margin-bottom: 1.5rem;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: end;">
-          <div>
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--neutral-700);">
-              <i class="fas fa-filter"></i> Status
-            </label>
-            <select id="filtro-status-gerenciar" onchange="aplicarFiltrosGerenciar()" style="width: 100%; padding: 0.75rem; border: 2px solid var(--neutral-200); border-radius: var(--radius-md); font-size: 0.9rem;">
-              <option value="">Todos</option>
-              <option value="PENDENTE">Pendente</option>
-              <option value="PAGO">Pago</option>
-              <option value="CANCELADO">Cancelado</option>
-            </select>
-          </div>
-          
-          <div>
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--neutral-700);">
-              <i class="fas fa-user"></i> Colaborador
-            </label>
-            <select id="filtro-colaborador-gerenciar" onchange="aplicarFiltrosGerenciar()" style="width: 100%; padding: 0.75rem; border: 2px solid var(--neutral-200); border-radius: var(--radius-md); font-size: 0.9rem;">
-              <option value="">Todos</option>
-              <option value="Débora">Débora</option>
-              <option value="Ruth">Ruth</option>
-              <option value="Laura">Laura</option>
-              <option value="Agatha">Agatha</option>
-            </select>
-          </div>
-          
-          <div>
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--neutral-700);">
-              <i class="fas fa-calendar"></i> Data Inicial
-            </label>
-            <input type="date" id="filtro-data-inicio-gerenciar" onchange="aplicarFiltrosGerenciar()" style="width: 100%; padding: 0.75rem; border: 2px solid var(--neutral-200); border-radius: var(--radius-md); font-size: 0.9rem;">
-          </div>
-          
-          <div>
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--neutral-700);">
-              <i class="fas fa-calendar"></i> Data Final
-            </label>
-            <input type="date" id="filtro-data-fim-gerenciar" onchange="aplicarFiltrosGerenciar()" style="width: 100%; padding: 0.75rem; border: 2px solid var(--neutral-200); border-radius: var(--radius-md); font-size: 0.9rem;">
-          </div>
-          
-          <div>
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--neutral-700);">
-              <i class="fas fa-dollar-sign"></i> Valor Mínimo
-            </label>
-            <input type="number" id="filtro-valor-min-gerenciar" placeholder="0.00" step="0.01" onchange="aplicarFiltrosGerenciar()" style="width: 100%; padding: 0.75rem; border: 2px solid var(--neutral-200); border-radius: var(--radius-md); font-size: 0.9rem;">
-          </div>
-          
-          <div>
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--neutral-700);">
-              <i class="fas fa-dollar-sign"></i> Valor Máximo
-            </label>
-            <input type="number" id="filtro-valor-max-gerenciar" placeholder="100.00" step="0.01" onchange="aplicarFiltrosGerenciar()" style="width: 100%; padding: 0.75rem; border: 2px solid var(--neutral-200); border-radius: var(--radius-md); font-size: 0.9rem;">
-          </div>
-          
-          <div style="display: flex; gap: 0.5rem;">
-            <button class="btn btn-primary" onclick="carregarTarefasGerenciar()" style="flex: 1;">
-              <i class="fas fa-sync-alt"></i> Atualizar
-            </button>
-            <button class="btn btn-secondary" onclick="limparFiltrosGerenciar()" style="flex: 1;">
-              <i class="fas fa-eraser"></i> Limpar
-            </button>
-          </div>
+      <div class="filters">
+        <div class="filter-group">
+          <label class="filter-label">Status</label>
+          <select class="filter-control" id="filtro-status-gerenciar" onchange="aplicarFiltrosGerenciar()">
+            <option value="">Todos</option>
+            <option value="PENDENTE">Pendente</option>
+            <option value="PAGO">Pago</option>
+            <option value="CANCELADO">Cancelado</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Colaborador</label>
+          <select class="filter-control" id="filtro-colaborador-gerenciar" onchange="aplicarFiltrosGerenciar()">
+            <option value="">Todos</option>
+            <option value="Débora">Débora</option>
+            <option value="Ruth">Ruth</option>
+            <option value="Laura">Laura</option>
+            <option value="Agatha">Agatha</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Data Inicial</label>
+          <input type="date" class="filter-control" id="filtro-data-inicio-gerenciar" onchange="aplicarFiltrosGerenciar()">
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Data Final</label>
+          <input type="date" class="filter-control" id="filtro-data-fim-gerenciar" onchange="aplicarFiltrosGerenciar()">
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Valor Mínimo</label>
+          <input type="number" class="filter-control" id="filtro-valor-min-gerenciar" placeholder="0.00" step="0.01" onchange="aplicarFiltrosGerenciar()">
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Valor Máximo</label>
+          <input type="number" class="filter-control" id="filtro-valor-max-gerenciar" placeholder="100.00" step="0.01" onchange="aplicarFiltrosGerenciar()">
         </div>
       </div>
 
       <!-- Resumo -->
-      <div id="resumo-gerenciar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-        <div class="kpi-card" style="background: linear-gradient(135deg, var(--info), var(--info-dark)); color: white;">
-          <div class="kpi-icon"><i class="fas fa-list"></i></div>
+      <div class="kpi-cards">
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, var(--info), var(--tertiary-600));">
+            <i class="fas fa-list"></i>
+          </div>
           <div class="kpi-content">
-            <div class="kpi-label">Total de Tarefas</div>
+            <div class="kpi-title">Total de Tarefas</div>
             <div class="kpi-value" id="total-tarefas-gerenciar">0</div>
           </div>
         </div>
         
-        <div class="kpi-card" style="background: linear-gradient(135deg, var(--success), var(--success-dark)); color: white;">
-          <div class="kpi-icon"><i class="fas fa-dollar-sign"></i></div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, var(--success), #059669);">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
           <div class="kpi-content">
-            <div class="kpi-label">Valor Total</div>
+            <div class="kpi-title">Valor Total</div>
             <div class="kpi-value" id="valor-total-gerenciar">R$ 0,00</div>
           </div>
         </div>
         
-        <div class="kpi-card" style="background: linear-gradient(135deg, var(--warning), var(--warning-dark)); color: white;">
-          <div class="kpi-icon"><i class="fas fa-clock"></i></div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, var(--warning), var(--secondary-600));">
+            <i class="fas fa-clock"></i>
+          </div>
           <div class="kpi-content">
-            <div class="kpi-label">Pendentes</div>
+            <div class="kpi-title">Pendentes</div>
             <div class="kpi-value" id="pendentes-gerenciar">0</div>
           </div>
         </div>
         
-        <div class="kpi-card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white;">
-          <div class="kpi-icon"><i class="fas fa-check"></i></div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, var(--primary-500), var(--primary-600));">
+            <i class="fas fa-check"></i>
+          </div>
           <div class="kpi-content">
-            <div class="kpi-label">Pagas</div>
+            <div class="kpi-title">Pagas</div>
             <div class="kpi-value" id="pagas-gerenciar">0</div>
           </div>
         </div>
       </div>
 
       <!-- Lista de Tarefas -->
-      <div class="table-container">
-        <div class="table-header">
+      <div class="card">
+        <div class="card-header">
           <h3><i class="fas fa-list"></i> Lista de Tarefas</h3>
         </div>
-        
-        <div id="lista-tarefas-gerenciar" style="background: white; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm);">
-          <div style="text-align: center; padding: 3rem; color: var(--neutral-500);">
-            <i class="fas fa-tasks" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
-            <p>Clique em "Atualizar" para carregar as tarefas</p>
+        <div class="card-body">
+          <div id="lista-tarefas-gerenciar">
+            <div style="text-align: center; padding: 3rem; color: var(--neutral-500);">
+              <i class="fas fa-tasks" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+              <p>Clique em "Atualizar" para carregar as tarefas</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Seção Colaboradores -->   <div id="colaboradores-section" class="section hidden">
+    <!-- Seção Colaboradores -->
+    <div id="colaboradores-section" class="section">
       <div class="content-header">
+        <button class="mobile-menu-btn" onclick="abrirMenuMobile()">
+          <i class="fas fa-bars"></i>
+        </button>
+        
         <div class="page-title">
           <h2><i class="fas fa-users"></i> Colaboradores</h2>
           <div class="breadcrumb">Painel Principal / Colaboradores</div>
         </div>
+        <div class="header-actions">
+          <button class="btn btn-info" onclick="carregarDadosColaboradores()">
+            <i class="fas fa-sync-alt"></i> Atualizar
+          </button>
+        </div>
       </div>
       
-      <div class="grid-layout">
-        <div class="card" id="colaborador-debora">
-          <div class="card-header">
-            <h3><i class="fas fa-user"></i> Débora</h3>
+      <!-- Cards dos Colaboradores -->
+      <div class="kpi-cards">
+        <div class="kpi-card" id="colaborador-debora">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+            <i class="fas fa-user"></i>
           </div>
-          <div class="card-body">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div>
-                <div class="kpi-title">Total de Tarefas</div>
-                <div class="kpi-value" style="font-size: 1.5rem;">0</div>
-              </div>
-              <div>
-                <div class="kpi-title">Valor Total</div>
-                <div class="kpi-value" style="font-size: 1.5rem;">R$ 0,00</div>
-              </div>
+          <div class="kpi-content">
+            <div class="kpi-title">Débora</div>
+            <div class="kpi-value">0</div>
+            <div class="kpi-change">
+              <span style="font-size: 1.2rem; font-weight: 600; color: var(--success);">R$ 0,00</span>
             </div>
           </div>
         </div>
         
-        <div class="card" id="colaborador-ruth">
-          <div class="card-header">
-            <h3><i class="fas fa-user"></i> Ruth</h3>
+        <div class="kpi-card" id="colaborador-ruth">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+            <i class="fas fa-user"></i>
           </div>
-          <div class="card-body">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div>
-                <div class="kpi-title">Total de Tarefas</div>
-                <div class="kpi-value" style="font-size: 1.5rem;">0</div>
-              </div>
-              <div>
-                <div class="kpi-title">Valor Total</div>
-                <div class="kpi-value" style="font-size: 1.5rem;">R$ 0,00</div>
-              </div>
+          <div class="kpi-content">
+            <div class="kpi-title">Ruth</div>
+            <div class="kpi-value">0</div>
+            <div class="kpi-change">
+              <span style="font-size: 1.2rem; font-weight: 600; color: var(--success);">R$ 0,00</span>
             </div>
           </div>
         </div>
         
-        <div class="card" id="colaborador-laura">
-          <div class="card-header">
-            <h3><i class="fas fa-user"></i> Laura</h3>
+        <div class="kpi-card" id="colaborador-laura">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, #eab308, #ca8a04);">
+            <i class="fas fa-user"></i>
           </div>
-          <div class="card-body">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div>
-                <div class="kpi-title">Total de Tarefas</div>
-                <div class="kpi-value" style="font-size: 1.5rem;">0</div>
-              </div>
-              <div>
-                <div class="kpi-title">Valor Total</div>
-                <div class="kpi-value" style="font-size: 1.5rem;">R$ 0,00</div>
-              </div>
+          <div class="kpi-content">
+            <div class="kpi-title">Laura</div>
+            <div class="kpi-value">0</div>
+            <div class="kpi-change">
+              <span style="font-size: 1.2rem; font-weight: 600; color: var(--success);">R$ 0,00</span>
             </div>
           </div>
         </div>
         
-        <div class="card" id="colaborador-agatha">
-          <div class="card-header">
-            <h3><i class="fas fa-user"></i> Agatha</h3>
+        <div class="kpi-card" id="colaborador-agatha">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+            <i class="fas fa-user"></i>
           </div>
-          <div class="card-body">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div>
-                <div class="kpi-title">Total de Tarefas</div>
-                <div class="kpi-value" style="font-size: 1.5rem;">0</div>
-              </div>
-              <div>
-                <div class="kpi-title">Valor Total</div>
-                <div class="kpi-value" style="font-size: 1.5rem;">R$ 0,00</div>
-              </div>
+          <div class="kpi-content">
+            <div class="kpi-title">Agatha</div>
+            <div class="kpi-value">0</div>
+            <div class="kpi-change">
+              <span style="font-size: 1.2rem; font-weight: 600; color: var(--success);">R$ 0,00</span>
             </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Detalhes dos Colaboradores -->
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fas fa-chart-bar"></i> Detalhes por Colaborador</h3>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Colaborador</th>
+                  <th>Total de Tarefas</th>
+                  <th>Valor Total</th>
+                  <th>Tarefas Pagas</th>
+                  <th>Valor Pago</th>
+                  <th>Tarefas Pendentes</th>
+                  <th>Valor Pendente</th>
+                </tr>
+              </thead>
+              <tbody id="tabela-colaboradores">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 2rem; color: var(--neutral-400);">
+                    Clique em "Atualizar" para carregar os dados
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Relatórios -->
-    <div id="relatorios-section" class="section hidden">
+
+    <!-- Seção Relatórios -->
+    <div id="relatorios-section" class="section">
       <div class="content-header">
+        <button class="mobile-menu-btn" onclick="abrirMenuMobile()">
+          <i class="fas fa-bars"></i>
+        </button>
+        
         <div class="page-title">
-          <h2><i class="fas fa-chart-bar"></i> Relatórios</h2>
+          <h2><i class="fas fa-file-alt"></i> Relatórios</h2>
           <div class="breadcrumb">Painel Principal / Relatórios</div>
         </div>
       </div>
       
       <div class="card">
         <div class="card-header">
-          <h3><i class="fas fa-download"></i> Exportar Relatórios</h3>
+          <h3><i class="fas fa-file-excel"></i> Exportar Relatórios</h3>
         </div>
         <div class="card-body">
           <div class="filters">
@@ -1558,7 +1530,28 @@ const db = firebase.firestore();
 
 // Variáveis globais
 let usuarioLogado = null;
+let ordemParaCancelar = null;
+let todasOrdens = [];
+let todasTarefasGerenciar = [];
+let rankingChart = null;
+let statusChart = null;
 const SESSAO_DURACAO = 30 * 60 * 1000; // 30 minutos em millisegundos
+
+// Usuários válidos
+const usuarios = {
+  'PAPAI': {
+    senha: 'PAPAI',
+    nome: 'THIAGO MOREIRA',
+    funcao: 'PAI',
+    avatar: 'P'
+  },
+  'MAMÃE': {
+    senha: 'MAMÃE',
+    nome: 'LETÍCIA BISPO',
+    funcao: 'MAMÃE',
+    avatar: 'M'
+  }
+};
 
 // Verificar sessão salva ao carregar a página
 function verificarSessaoSalva() {
@@ -1596,26 +1589,6 @@ function salvarSessao(usuario) {
   
   localStorage.setItem('minhasTarefinhas_session', JSON.stringify(sessao));
 }
-let ordemParaCancelar = null;
-let todasOrdens = [];
-let rankingChart = null;
-let statusChart = null;
-
-// Usuários válidos
-const usuarios = {
-  'PAPAI': {
-    senha: 'PAPAI',
-    nome: 'THIAGO MOREIRA',
-    funcao: 'PAI',
-    avatar: 'P'
-  },
-  'MAMÃE': {
-    senha: 'MAMÃE',
-    nome: 'LETÍCIA BISPO',
-    funcao: 'MAMÃE',
-    avatar: 'M'
-  }
-};
 
 // Função para mostrar painel admin
 function mostrarPainelAdmin() {
@@ -1629,7 +1602,9 @@ function mostrarPainelAdmin() {
   document.getElementById('admin-panel').classList.remove('hidden');
   
   // Carregar dashboard inicial
-  atualizarDashboard();
+  setTimeout(() => {
+    atualizarDashboard();
+  }, 100);
 }
 
 // Função de login
@@ -1642,6 +1617,9 @@ function fazerLogin(event) {
   if (usuarios[usuario] && usuarios[usuario].senha === senha) {
     usuarioLogado = usuarios[usuario];
     
+    // Salvar sessão
+    salvarSessao(usuarioLogado);
+    
     mostrarPainelAdmin();
     
     mostrarNotificacao(`Bem-vindo(a), ${usuarioLogado.nome}!`, 'success');
@@ -1653,6 +1631,10 @@ function fazerLogin(event) {
 // Função de logout
 function fazerLogout() {
   usuarioLogado = null;
+  
+  // Remover sessão salva
+  localStorage.removeItem('minhasTarefinhas_session');
+  
   document.getElementById('login-screen').classList.remove('hidden');
   document.getElementById('admin-panel').classList.add('hidden');
   
@@ -1667,17 +1649,20 @@ function fazerLogout() {
 function mostrarSecao(secao) {
   // Esconder todas as seções
   const secoes = document.querySelectorAll('.section');
-  secoes.forEach(s => s.classList.add('hidden'));
+  secoes.forEach(s => s.classList.remove('active'));
   
   // Remover classe active de todos os nav-items
   const navItems = document.querySelectorAll('.nav-item');
   navItems.forEach(item => item.classList.remove('active'));
   
   // Mostrar seção selecionada
-  document.getElementById(`${secao}-section`).classList.remove('hidden');
+  document.getElementById(`${secao}-section`).classList.add('active');
   
   // Adicionar classe active ao nav-item correspondente
   event.target.closest('.nav-item').classList.add('active');
+  
+  // Fechar menu mobile se estiver aberto
+  fecharMenuMobile();
   
   // Carregar dados específicos da seção
   switch(secao) {
@@ -1687,10 +1672,24 @@ function mostrarSecao(secao) {
     case 'ordens':
       carregarOrdens();
       break;
+    case 'gerenciar-tarefas':
+      carregarTarefasGerenciar();
+      break;
     case 'colaboradores':
       carregarDadosColaboradores();
       break;
   }
+}
+
+// Funções para menu mobile
+function abrirMenuMobile() {
+  document.getElementById('sidebar').classList.add('open');
+  document.querySelector('.sidebar-overlay').classList.add('active');
+}
+
+function fecharMenuMobile() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.querySelector('.sidebar-overlay').classList.remove('active');
 }
 
 // Função para atualizar dashboard
@@ -1701,6 +1700,7 @@ async function atualizarDashboard() {
     document.getElementById('valor-total').textContent = '...';
     document.getElementById('tarefas-pagas').textContent = '...';
     document.getElementById('tarefas-pendentes').textContent = '...';
+    document.getElementById('tarefas-canceladas').textContent = '...';
     
     const snapshot = await db.collection('tarefas').get();
     
@@ -1708,6 +1708,7 @@ async function atualizarDashboard() {
     let valorTotal = 0;
     let tarefasPagas = 0;
     let tarefasPendentes = 0;
+    let tarefasCanceladas = 0;
     
     const colaboradores = {
       'Débora': { tarefas: 0, valor: 0 },
@@ -1731,6 +1732,8 @@ async function atualizarDashboard() {
         tarefasPagas++;
       } else if (tarefa.status === 'PENDENTE') {
         tarefasPendentes++;
+      } else if (tarefa.status === 'CANCELADO') {
+        tarefasCanceladas++;
       }
       
       statusCount[tarefa.status] = (statusCount[tarefa.status] || 0) + 1;
@@ -1746,6 +1749,7 @@ async function atualizarDashboard() {
     document.getElementById('valor-total').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
     document.getElementById('tarefas-pagas').textContent = tarefasPagas;
     document.getElementById('tarefas-pendentes').textContent = tarefasPendentes;
+    document.getElementById('tarefas-canceladas').textContent = tarefasCanceladas;
     
     // Atualizar gráficos
     atualizarGraficoRanking(colaboradores);
@@ -1759,6 +1763,7 @@ async function atualizarDashboard() {
     document.getElementById('valor-total').textContent = 'R$ 0,00';
     document.getElementById('tarefas-pagas').textContent = '0';
     document.getElementById('tarefas-pendentes').textContent = '0';
+    document.getElementById('tarefas-canceladas').textContent = '0';
     
     mostrarNotificacao('Erro ao carregar dados do dashboard', 'error');
   }
@@ -1933,6 +1938,10 @@ function atualizarTabelaOrdens(ordens) {
             <button class="btn btn-danger" style="padding: 0.5rem 1rem;" onclick="iniciarCancelamento('${ordem.id}')">
               <i class="fas fa-times"></i> Cancelar
             </button>
+          ` : ordem.status === 'PAGO' ? `
+            <button class="btn btn-warning" style="padding: 0.5rem 1rem;" onclick="alterarStatus('${ordem.id}', 'PENDENTE')">
+              <i class="fas fa-undo"></i> Voltar p/ Pendente
+            </button>
           ` : ''}
         </td>
       </tr>
@@ -1940,6 +1949,118 @@ function atualizarTabelaOrdens(ordens) {
   });
   
   tbody.innerHTML = html;
+}
+
+// Função para carregar tarefas na seção gerenciar
+async function carregarTarefasGerenciar() {
+  try {
+    const snapshot = await db.collection('tarefas').orderBy('dataLancamento', 'desc').get();
+    
+    todasTarefasGerenciar = [];
+    snapshot.forEach(doc => {
+      todasTarefasGerenciar.push({ id: doc.id, ...doc.data() });
+    });
+    
+    aplicarFiltrosGerenciar();
+    
+  } catch (error) {
+    console.error('Erro ao carregar tarefas:', error);
+    mostrarNotificacao('Erro ao carregar tarefas', 'error');
+  }
+}
+
+// Função para aplicar filtros na seção gerenciar
+function aplicarFiltrosGerenciar() {
+  const filtroStatus = document.getElementById('filtro-status-gerenciar').value;
+  const filtroColaborador = document.getElementById('filtro-colaborador-gerenciar').value;
+  const filtroDataInicio = document.getElementById('filtro-data-inicio-gerenciar').value;
+  const filtroDataFim = document.getElementById('filtro-data-fim-gerenciar').value;
+  const filtroValorMin = parseFloat(document.getElementById('filtro-valor-min-gerenciar').value) || 0;
+  const filtroValorMax = parseFloat(document.getElementById('filtro-valor-max-gerenciar').value) || Infinity;
+  
+  let tarefasFiltradas = todasTarefasGerenciar.filter(tarefa => {
+    let passa = true;
+    
+    if (filtroStatus && tarefa.status !== filtroStatus) passa = false;
+    if (filtroColaborador && tarefa.colaborador !== filtroColaborador) passa = false;
+    if (filtroDataInicio && tarefa.data < filtroDataInicio) passa = false;
+    if (filtroDataFim && tarefa.data > filtroDataFim) passa = false;
+    if (tarefa.valorTotal < filtroValorMin || tarefa.valorTotal > filtroValorMax) passa = false;
+    
+    return passa;
+  });
+  
+  atualizarResumoGerenciar(tarefasFiltradas);
+  atualizarListaTarefasGerenciar(tarefasFiltradas);
+}
+
+// Função para atualizar resumo na seção gerenciar
+function atualizarResumoGerenciar(tarefas) {
+  const total = tarefas.length;
+  const valorTotal = tarefas.reduce((sum, t) => sum + t.valorTotal, 0);
+  const pendentes = tarefas.filter(t => t.status === 'PENDENTE').length;
+  const pagas = tarefas.filter(t => t.status === 'PAGO').length;
+  
+  document.getElementById('total-tarefas-gerenciar').textContent = total;
+  document.getElementById('valor-total-gerenciar').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
+  document.getElementById('pendentes-gerenciar').textContent = pendentes;
+  document.getElementById('pagas-gerenciar').textContent = pagas;
+}
+
+// Função para atualizar lista de tarefas na seção gerenciar
+function atualizarListaTarefasGerenciar(tarefas) {
+  const container = document.getElementById('lista-tarefas-gerenciar');
+  
+  if (tarefas.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 3rem; color: var(--neutral-500);">
+        <i class="fas fa-tasks" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+        <p>Nenhuma tarefa encontrada com os filtros aplicados</p>
+      </div>
+    `;
+    return;
+  }
+  
+  let html = '';
+  tarefas.forEach(tarefa => {
+    const statusClass = tarefa.status === 'PAGO' ? 'badge-paid' : 
+                       tarefa.status === 'CANCELADO' ? 'badge-canceled' : 'badge-pending';
+    
+    const dataFormatada = new Date(tarefa.data).toLocaleDateString('pt-BR');
+    
+    const servicosHtml = tarefa.servicos.map(s => 
+      `<li>${s.nome} - R$ ${s.preco.toFixed(2).replace('.', ',')}</li>`
+    ).join('');
+    
+    html += `
+      <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; box-shadow: var(--shadow-sm); border: 2px solid var(--primary-100);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h4 style="margin: 0; color: var(--primary-600); font-family: 'Fredoka', cursive;">#${tarefa.numeroOrdem}</h4>
+            <p style="margin: 0; color: var(--neutral-600);">${tarefa.colaborador} - ${dataFormatada}</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <span class="badge ${statusClass}">${tarefa.status}</span>
+            <span style="font-weight: 700; color: var(--success); font-size: 1.2rem;">R$ ${tarefa.valorTotal.toFixed(2).replace('.', ',')}</span>
+          </div>
+        </div>
+        <div>
+          <p style="margin: 0.5rem 0; font-weight: 600; color: var(--neutral-700);">Serviços:</p>
+          <ul style="margin: 0; padding-left: 1.5rem; color: var(--neutral-600);">
+            ${servicosHtml}
+          </ul>
+        </div>
+        ${tarefa.justificativaCancelamento ? `
+          <div style="margin-top: 1rem; padding: 1rem; background: var(--error-50); border-radius: var(--radius-md); border-left: 4px solid var(--error);">
+            <p style="margin: 0; font-weight: 600; color: var(--error);">Justificativa do Cancelamento:</p>
+            <p style="margin: 0.5rem 0 0 0; color: var(--neutral-700);">${tarefa.justificativaCancelamento}</p>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
 }
 
 // Função para alterar status
@@ -2004,17 +2125,25 @@ async function carregarDadosColaboradores() {
     const snapshot = await db.collection('tarefas').get();
     
     const colaboradores = {
-      'Débora': { tarefas: 0, valor: 0 },
-      'Ruth': { tarefas: 0, valor: 0 },
-      'Laura': { tarefas: 0, valor: 0 },
-      'Agatha': { tarefas: 0, valor: 0 }
+      'Débora': { tarefas: 0, valorTotal: 0, tarefasPagas: 0, valorPago: 0, tarefasPendentes: 0, valorPendente: 0 },
+      'Ruth': { tarefas: 0, valorTotal: 0, tarefasPagas: 0, valorPago: 0, tarefasPendentes: 0, valorPendente: 0 },
+      'Laura': { tarefas: 0, valorTotal: 0, tarefasPagas: 0, valorPago: 0, tarefasPendentes: 0, valorPendente: 0 },
+      'Agatha': { tarefas: 0, valorTotal: 0, tarefasPagas: 0, valorPago: 0, tarefasPendentes: 0, valorPendente: 0 }
     };
     
     snapshot.forEach(doc => {
       const tarefa = doc.data();
       if (colaboradores[tarefa.colaborador]) {
         colaboradores[tarefa.colaborador].tarefas++;
-        colaboradores[tarefa.colaborador].valor += tarefa.valorTotal;
+        colaboradores[tarefa.colaborador].valorTotal += tarefa.valorTotal;
+        
+        if (tarefa.status === 'PAGO') {
+          colaboradores[tarefa.colaborador].tarefasPagas++;
+          colaboradores[tarefa.colaborador].valorPago += tarefa.valorTotal;
+        } else if (tarefa.status === 'PENDENTE') {
+          colaboradores[tarefa.colaborador].tarefasPendentes++;
+          colaboradores[tarefa.colaborador].valorPendente += tarefa.valorTotal;
+        }
       }
     });
     
@@ -2024,16 +2153,43 @@ async function carregarDadosColaboradores() {
       const dados = colaboradores[nome];
       
       const tarefasElement = card.querySelector('.kpi-value');
-      const valorElement = card.querySelectorAll('.kpi-value')[1];
+      const valorElement = card.querySelector('.kpi-change span');
       
       tarefasElement.textContent = dados.tarefas;
-      valorElement.textContent = `R$ ${dados.valor.toFixed(2).replace('.', ',')}`;
+      valorElement.textContent = `R$ ${dados.valorTotal.toFixed(2).replace('.', ',')}`;
     });
+    
+    // Atualizar tabela detalhada
+    atualizarTabelaColaboradores(colaboradores);
     
   } catch (error) {
     console.error('Erro ao carregar dados dos colaboradores:', error);
     mostrarNotificacao('Erro ao carregar dados dos colaboradores', 'error');
   }
+}
+
+// Função para atualizar tabela de colaboradores
+function atualizarTabelaColaboradores(colaboradores) {
+  const tbody = document.getElementById('tabela-colaboradores');
+  
+  let html = '';
+  Object.keys(colaboradores).forEach(nome => {
+    const dados = colaboradores[nome];
+    
+    html += `
+      <tr>
+        <td><strong>${nome}</strong></td>
+        <td>${dados.tarefas}</td>
+        <td>R$ ${dados.valorTotal.toFixed(2).replace('.', ',')}</td>
+        <td>${dados.tarefasPagas}</td>
+        <td>R$ ${dados.valorPago.toFixed(2).replace('.', ',')}</td>
+        <td>${dados.tarefasPendentes}</td>
+        <td>R$ ${dados.valorPendente.toFixed(2).replace('.', ',')}</td>
+      </tr>
+    `;
+  });
+  
+  tbody.innerHTML = html;
 }
 
 // Função para exportar relatório
@@ -2043,29 +2199,29 @@ async function exportarRelatorio() {
   const colaborador = document.getElementById('relatorio-colaborador').value;
   
   try {
-    let query = db.collection('tarefas');
-    
-    if (dataInicio) {
-      query = query.where('data', '>=', dataInicio);
-    }
-    if (dataFim) {
-      query = query.where('data', '<=', dataFim);
-    }
-    
-    const snapshot = await query.get();
+    const snapshot = await db.collection('tarefas').get();
     
     let dados = [];
     snapshot.forEach(doc => {
       const tarefa = doc.data();
       
-      if (!colaborador || tarefa.colaborador === colaborador) {
+      // Aplicar filtros
+      let incluir = true;
+      if (dataInicio && tarefa.data < dataInicio) incluir = false;
+      if (dataFim && tarefa.data > dataFim) incluir = false;
+      if (colaborador && tarefa.colaborador !== colaborador) incluir = false;
+      
+      if (incluir) {
+        const servicosTexto = tarefa.servicos.map(s => `${s.nome} (R$ ${s.preco.toFixed(2)})`).join('; ');
+        
         dados.push({
           'Número da Ordem': tarefa.numeroOrdem,
           'Colaborador': tarefa.colaborador,
           'Data': new Date(tarefa.data).toLocaleDateString('pt-BR'),
-          'Serviços': tarefa.servicos.map(s => s.nome).join(', '),
+          'Serviços': servicosTexto,
           'Valor Total': tarefa.valorTotal,
           'Status': tarefa.status,
+          'Data de Lançamento': new Date(tarefa.dataLancamento).toLocaleDateString('pt-BR'),
           'Justificativa Cancelamento': tarefa.justificativaCancelamento || ''
         });
       }
@@ -2079,13 +2235,16 @@ async function exportarRelatorio() {
     // Criar planilha Excel
     const ws = XLSX.utils.json_to_sheet(dados);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Relatório de Tarefas');
+    XLSX.utils.book_append_sheet(wb, ws, 'Relatório');
+    
+    // Gerar nome do arquivo
+    const agora = new Date();
+    const nomeArquivo = `relatorio_tarefas_${agora.getFullYear()}_${(agora.getMonth() + 1).toString().padStart(2, '0')}_${agora.getDate().toString().padStart(2, '0')}.xlsx`;
     
     // Baixar arquivo
-    const nomeArquivo = `relatorio_tarefas_${new Date().toISOString().split('T')[0]}.xlsx`;
     XLSX.writeFile(wb, nomeArquivo);
     
-    mostrarNotificacao('Relatório exportado com sucesso!', 'success');
+    mostrarNotificacao(`Relatório exportado: ${nomeArquivo}`, 'success');
     
   } catch (error) {
     console.error('Erro ao exportar relatório:', error);
@@ -2093,252 +2252,21 @@ async function exportarRelatorio() {
   }
 }
 
-// Variáveis globais para gerenciar tarefas
-let todasTarefasGerenciar = [];
-let tarefasFiltradas = [];
-
-// Função para carregar tarefas para gerenciar
-async function carregarTarefasGerenciar() {
-  const container = document.getElementById('lista-tarefas-gerenciar');
-  container.innerHTML = '<div style="text-align: center; padding: 2rem;"><div class="loading"></div><p>Carregando tarefas...</p></div>';
-  
-  try {
-    const snapshot = await db.collection('tarefas').orderBy('dataLancamento', 'desc').get();
-    
-    todasTarefasGerenciar = [];
-    snapshot.forEach(doc => {
-      const tarefa = doc.data();
-      tarefa.id = doc.id; // Adicionar ID do documento
-      todasTarefasGerenciar.push(tarefa);
-    });
-    
-    aplicarFiltrosGerenciar();
-    
-  } catch (error) {
-    console.error('Erro ao carregar tarefas:', error);
-    container.innerHTML = `
-      <div style="text-align: center; padding: 3rem; color: var(--neutral-500);">
-        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--error);"></i>
-        <p>Erro ao carregar tarefas. Tente novamente.</p>
-      </div>
-    `;
-  }
-}
-
-// Função para aplicar filtros
-function aplicarFiltrosGerenciar() {
-  const statusFiltro = document.getElementById('filtro-status-gerenciar').value;
-  const colaboradorFiltro = document.getElementById('filtro-colaborador-gerenciar').value;
-  const dataInicioFiltro = document.getElementById('filtro-data-inicio-gerenciar').value;
-  const dataFimFiltro = document.getElementById('filtro-data-fim-gerenciar').value;
-  const valorMinFiltro = parseFloat(document.getElementById('filtro-valor-min-gerenciar').value) || 0;
-  const valorMaxFiltro = parseFloat(document.getElementById('filtro-valor-max-gerenciar').value) || Infinity;
-  
-  tarefasFiltradas = todasTarefasGerenciar.filter(tarefa => {
-    // Filtro por status
-    if (statusFiltro && tarefa.status !== statusFiltro) return false;
-    
-    // Filtro por colaborador
-    if (colaboradorFiltro && tarefa.colaborador !== colaboradorFiltro) return false;
-    
-    // Filtro por data
-    const dataTarefa = new Date(tarefa.data);
-    if (dataInicioFiltro && dataTarefa < new Date(dataInicioFiltro)) return false;
-    if (dataFimFiltro && dataTarefa > new Date(dataFimFiltro)) return false;
-    
-    // Filtro por valor
-    if (tarefa.valorTotal < valorMinFiltro || tarefa.valorTotal > valorMaxFiltro) return false;
-    
-    return true;
-  });
-  
-  atualizarResumoGerenciar();
-  exibirTarefasFiltradas();
-}
-
-// Função para atualizar resumo
-function atualizarResumoGerenciar() {
-  const totalTarefas = tarefasFiltradas.length;
-  const valorTotal = tarefasFiltradas.reduce((total, tarefa) => total + tarefa.valorTotal, 0);
-  const pendentes = tarefasFiltradas.filter(t => t.status === 'PENDENTE').length;
-  const pagas = tarefasFiltradas.filter(t => t.status === 'PAGO').length;
-  
-  document.getElementById('total-tarefas-gerenciar').textContent = totalTarefas;
-  document.getElementById('valor-total-gerenciar').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
-  document.getElementById('pendentes-gerenciar').textContent = pendentes;
-  document.getElementById('pagas-gerenciar').textContent = pagas;
-}
-
-// Função para exibir tarefas filtradas
-function exibirTarefasFiltradas() {
-  const container = document.getElementById('lista-tarefas-gerenciar');
-  
-  if (tarefasFiltradas.length === 0) {
-    container.innerHTML = `
-      <div style="text-align: center; padding: 3rem; color: var(--neutral-500);">
-        <i class="fas fa-tasks" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
-        <p>Nenhuma tarefa encontrada com os filtros aplicados</p>
-      </div>
-    `;
-    return;
-  }
-  
-  let html = `
-    <table style="width: 100%; border-collapse: collapse;">
-      <thead style="background: var(--neutral-50); border-bottom: 2px solid var(--neutral-200);">
-        <tr>
-          <th style="padding: 1rem; text-align: left; font-weight: 600; color: var(--neutral-700);">Número</th>
-          <th style="padding: 1rem; text-align: left; font-weight: 600; color: var(--neutral-700);">Colaborador</th>
-          <th style="padding: 1rem; text-align: left; font-weight: 600; color: var(--neutral-700);">Data</th>
-          <th style="padding: 1rem; text-align: left; font-weight: 600; color: var(--neutral-700);">Serviços</th>
-          <th style="padding: 1rem; text-align: left; font-weight: 600; color: var(--neutral-700);">Valor</th>
-          <th style="padding: 1rem; text-align: left; font-weight: 600; color: var(--neutral-700);">Status</th>
-          <th style="padding: 1rem; text-align: center; font-weight: 600; color: var(--neutral-700);">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-  
-  tarefasFiltradas.forEach(tarefa => {
-    const statusClass = tarefa.status === 'PAGO' ? 'success' : tarefa.status === 'CANCELADO' ? 'error' : 'warning';
-    const statusIcon = tarefa.status === 'PAGO' ? 'check-circle' : tarefa.status === 'CANCELADO' ? 'times-circle' : 'clock';
-    
-    html += `
-      <tr style="border-bottom: 1px solid var(--neutral-200);">
-        <td style="padding: 1rem; font-weight: 600; color: var(--primary-600);">${tarefa.numeroOrdem}</td>
-        <td style="padding: 1rem;">
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <div style="width: 32px; height: 32px; background: var(--primary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--primary-600);">
-              ${tarefa.colaborador.charAt(0)}
-            </div>
-            ${tarefa.colaborador}
-          </div>
-        </td>
-        <td style="padding: 1rem;">${new Date(tarefa.data).toLocaleDateString('pt-BR')}</td>
-        <td style="padding: 1rem;">
-          <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${tarefa.servicos.map(s => s.nome).join(', ')}">
-            ${tarefa.servicos.map(s => s.nome).join(', ')}
-          </div>
-          <small style="color: var(--neutral-500);">${tarefa.servicos.length} serviço(s)</small>
-        </td>
-        <td style="padding: 1rem; font-weight: 600; color: var(--success-600);">R$ ${tarefa.valorTotal.toFixed(2).replace('.', ',')}</td>
-        <td style="padding: 1rem;">
-          <span class="status-badge status-${statusClass}">
-            <i class="fas fa-${statusIcon}"></i> ${tarefa.status}
-          </span>
-        </td>
-        <td style="padding: 1rem; text-align: center;">
-          <div style="display: flex; gap: 0.5rem; justify-content: center;">
-            ${tarefa.status === 'PENDENTE' ? `
-              <button class="btn btn-success btn-sm" onclick="alterarStatusTarefa('${tarefa.id}', 'PAGO')" title="Marcar como Pago">
-                <i class="fas fa-check"></i>
-              </button>
-              <button class="btn btn-error btn-sm" onclick="abrirModalCancelamento('${tarefa.id}')" title="Cancelar">
-                <i class="fas fa-times"></i>
-              </button>
-            ` : tarefa.status === 'PAGO' ? `
-              <button class="btn btn-warning btn-sm" onclick="alterarStatusTarefa('${tarefa.id}', 'PENDENTE')" title="Voltar para Pendente">
-                <i class="fas fa-undo"></i>
-              </button>
-            ` : `
-              <button class="btn btn-info btn-sm" onclick="alterarStatusTarefa('${tarefa.id}', 'PENDENTE')" title="Reativar">
-                <i class="fas fa-redo"></i>
-              </button>
-            `}
-          </div>
-        </td>
-      </tr>
-    `;
-  });
-  
-  html += `
-      </tbody>
-    </table>
-  `;
-  
-  container.innerHTML = html;
-}
-
-// Função para alterar status da tarefa
-async function alterarStatusTarefa(tarefaId, novoStatus) {
-  try {
-    await db.collection('tarefas').doc(tarefaId).update({
-      status: novoStatus,
-      dataAtualizacao: new Date().toISOString()
-    });
-    
-    mostrarNotificacao(`Status alterado para ${novoStatus} com sucesso!`, 'success');
-    carregarTarefasGerenciar();
-    atualizarDashboard();
-    
-  } catch (error) {
-    console.error('Erro ao alterar status:', error);
-    mostrarNotificacao('Erro ao alterar status. Tente novamente.', 'error');
-  }
-}
-
-// Função para abrir modal de cancelamento
-function abrirModalCancelamento(tarefaId) {
-  const justificativa = prompt('Digite a justificativa para o cancelamento:');
-  
-  if (justificativa && justificativa.trim()) {
-    cancelarTarefaComJustificativa(tarefaId, justificativa.trim());
-  } else if (justificativa !== null) {
-    mostrarNotificacao('Justificativa é obrigatória para cancelamento!', 'error');
-  }
-}
-
-// Função para cancelar tarefa com justificativa
-async function cancelarTarefaComJustificativa(tarefaId, justificativa) {
-  try {
-    await db.collection('tarefas').doc(tarefaId).update({
-      status: 'CANCELADO',
-      justificativaCancelamento: justificativa,
-      dataAtualizacao: new Date().toISOString()
-    });
-    
-    mostrarNotificacao('Tarefa cancelada com sucesso!', 'success');
-    carregarTarefasGerenciar();
-    atualizarDashboard();
-    
-  } catch (error) {
-    console.error('Erro ao cancelar tarefa:', error);
-    mostrarNotificacao('Erro ao cancelar tarefa. Tente novamente.', 'error');
-  }
-}
-
-// Função para limpar filtros
-function limparFiltrosGerenciar() {
-  document.getElementById('filtro-status-gerenciar').value = '';
-  document.getElementById('filtro-colaborador-gerenciar').value = '';
-  document.getElementById('filtro-data-inicio-gerenciar').value = '';
-  document.getElementById('filtro-data-fim-gerenciar').value = '';
-  document.getElementById('filtro-valor-min-gerenciar').value = '';
-  document.getElementById('filtro-valor-max-gerenciar').value = '';
-  
-  aplicarFiltrosGerenciar();
-}
-
-// Função para mostrar notificação
+// Função para mostrar notificações
 function mostrarNotificacao(mensagem, tipo = 'info') {
   const container = document.getElementById('notification-container');
   
   const notification = document.createElement('div');
-  notification.className = `notification notification-${tipo}`;
+  notification.className = `notification ${tipo}`;
   
   const icon = tipo === 'success' ? 'check-circle' : 
                tipo === 'error' ? 'exclamation-circle' : 
                tipo === 'warning' ? 'exclamation-triangle' : 'info-circle';
   
   notification.innerHTML = `
-    <div class="notification-icon">
-      <i class="fas fa-${icon}"></i>
-    </div>
-    <div class="notification-content">
-      <div class="notification-title">${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</div>
-      <div class="notification-message">${mensagem}</div>
-    </div>
-    <button class="notification-close" onclick="this.parentElement.remove()">
+    <i class="fas fa-${icon}" style="margin-right: 0.75rem; color: var(--${tipo === 'error' ? 'error' : tipo === 'warning' ? 'warning' : tipo === 'success' ? 'success' : 'info'}); font-size: 1.25rem;"></i>
+    <span style="color: var(--neutral-800); font-weight: 500; flex: 1;">${mensagem}</span>
+    <button onclick="this.parentElement.remove()" style="margin-left: auto; background: none; border: none; color: var(--neutral-500); cursor: pointer; padding: 0.25rem;">
       <i class="fas fa-times"></i>
     </button>
   `;
@@ -2348,8 +2276,7 @@ function mostrarNotificacao(mensagem, tipo = 'info') {
   // Remover automaticamente após 5 segundos
   setTimeout(() => {
     if (notification.parentElement) {
-      notification.classList.add('notification-hiding');
-      setTimeout(() => notification.remove(), 300);
+      notification.remove();
     }
   }, 5000);
 }
@@ -2362,150 +2289,9 @@ window.onclick = function(event) {
   }
 }
 
-// Função para mostrar a tela de login
-function mostrarTelaLogin() {
-  document.getElementById("login-screen").style.display = "flex";
-  document.getElementById("admin-panel").style.display = "none";
-}
-
-// Funções para menu mobile
-function abrirMenuMobile() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.querySelector('.sidebar-overlay');
-  
-  sidebar.classList.add('open');
-  overlay.classList.add('active');
-}
-
-function fecharMenuMobile() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.querySelector('.sidebar-overlay');
-  
-  sidebar.classList.remove('open');
-  overlay.classList.remove('active');
-}
-
-// Funções de sessão corrigidas
-function salvarSessao(usuario) {
-  const sessao = {
-    usuario: usuario,
-    timestamp: new Date().getTime()
-  };
-  localStorage.setItem('minhasTarefinhas_session', JSON.stringify(sessao));
-}
-
-function verificarSessaoSalva() {
-  try {
-    const sessaoSalva = localStorage.getItem('minhasTarefinhas_session');
-    
-    if (!sessaoSalva) {
-      return false;
-    }
-    
-    const sessao = JSON.parse(sessaoSalva);
-    const agora = new Date().getTime();
-    const tempoExpiracao = 30 * 60 * 1000; // 30 minutos em milissegundos
-    
-    // Verificar se a sessão expirou
-    if (agora - sessao.timestamp > tempoExpiracao) {
-      localStorage.removeItem('minhasTarefinhas_session');
-      return false;
-    }
-    
-    // Sessão válida - restaurar usuário logado
-    usuarioLogado = sessao.usuario;
-    
-    // Atualizar informações do usuário na interface
-    document.getElementById('user-name').textContent = usuarioLogado.nome;
-    document.getElementById('user-role').textContent = usuarioLogado.funcao;
-    document.getElementById('user-avatar').textContent = usuarioLogado.avatar;
-    
-    // Esconder tela de login e mostrar painel
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('admin-panel').classList.remove('hidden');
-    
-    // Carregar dashboard inicial
-    atualizarDashboard();
-    
-    return true;
-    
-  } catch (error) {
-    console.error('Erro ao verificar sessão:', error);
-    localStorage.removeItem('minhasTarefinhas_session');
-    return false;
-  }
-}
-
-function fazerLogout() {
-  localStorage.removeItem('minhasTarefinhas_session');
-  usuarioLogado = null;
-  mostrarTelaLogin();
-  mostrarNotificacao('Logout realizado com sucesso!', 'success');
-}
-
-// Função para fazer login (corrigida)
-function fazerLogin(event) {
-  if (event) {
-    event.preventDefault();
-  }
-  
-  const usuario = document.getElementById('usuario').value.trim();
-  const senha = document.getElementById('senha').value.trim();
-  
-  if (!usuario || !senha) {
-    mostrarNotificacao('Preencha usuário e senha!', 'error');
-    return;
-  }
-  
-  // Verificar credenciais
-  const usuarios = {
-    'PAPAI': { senha: 'PAPAI', nome: 'THIAGO MOREIRA', funcao: 'PAI', avatar: 'P' },
-    'MAMÃE': { senha: 'MAMÃE', nome: 'LETÍCIA BISPO', funcao: 'MAMÃE', avatar: 'M' }
-  };
-  
-  if (usuarios[usuario] && usuarios[usuario].senha === senha) {
-    usuarioLogado = {
-      usuario: usuario,
-      nome: usuarios[usuario].nome,
-      funcao: usuarios[usuario].funcao,
-      avatar: usuarios[usuario].avatar
-    };
-    
-    // Salvar sessão
-    salvarSessao(usuarioLogado);
-    
-    // Atualizar informações do usuário na interface
-    document.getElementById('user-name').textContent = usuarioLogado.nome;
-    document.getElementById('user-role').textContent = usuarioLogado.funcao;
-    document.getElementById('user-avatar').textContent = usuarioLogado.avatar;
-    
-    // Esconder tela de login e mostrar painel
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('admin-panel').classList.remove('hidden');
-    
-    // Carregar dashboard inicial
-    atualizarDashboard();
-    
-    mostrarNotificacao(`Bem-vindo(a), ${usuarioLogado.nome}!`, 'success');
-  } else {
-    mostrarNotificacao('Usuário ou senha incorretos!', 'error');
-  }
-}
-
-// Inicialização
-document.addEventListener("DOMContentLoaded", function() {
-  // Verificar se há sessão salva
-  if (!verificarSessaoSalva()) {
-    // Se não há sessão válida, mostrar tela de login
-    mostrarTelaLogin();
-  }
-  
-  // Definir datas padrão para relatórios (último mês)
-  const hoje = new Date();
-  const umMesAtras = new Date(hoje.getFullYear(), hoje.getMonth() - 1, hoje.getDate());
-  
-  document.getElementById("relatorio-data-inicio").value = umMesAtras.toISOString().split("T")[0];
-  document.getElementById("relatorio-data-fim").value = hoje.toISOString().split("T")[0];
+// Verificar sessão ao carregar a página
+document.addEventListener('DOMContentLoaded', function() {
+  verificarSessaoSalva();
 });
 </script>
 </body>

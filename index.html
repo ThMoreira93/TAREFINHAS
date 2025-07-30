@@ -675,6 +675,27 @@
       50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
       100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
     }
+
+    /* Estilos para alertas de validação */
+    .alert {
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 1rem;
+      border: 2px solid;
+      font-weight: 500;
+    }
+
+    .alert-warning {
+      background: linear-gradient(135deg, var(--secondary-50), var(--secondary-100));
+      border-color: var(--secondary-400);
+      color: var(--secondary-800);
+    }
+
+    .alert-info {
+      background: linear-gradient(135deg, var(--tertiary-50), var(--tertiary-100));
+      border-color: var(--tertiary-400);
+      color: var(--tertiary-800);
+    }
 </style>
 </head>
 <body>
@@ -729,7 +750,7 @@
               </label>
 <div class="input-wrapper">
 <i class="fas fa-broom input-icon"></i>
-<select class="input-with-icon" id="servico" required onchange="calcularTotal()">
+<select class="input-with-icon" id="servico" onchange="calcularTotal()">
 <option value="">Selecione o serviço</option>
 <option value="Dobrar roupas" data-price="0.25">Dobrar roupas - R$ 0,25</option>
 <option value="Varrer a casa e passar pano" data-price="0.50">Varrer a casa e passar pano - R$ 0,50</option>
@@ -749,9 +770,18 @@
 <div id="servicos-selecionados">
 <p style="text-align: center; color: var(--neutral-400); font-style: italic;">Nenhum serviço selecionado ainda</p>
 </div>
+<div style="display: flex; gap: 1rem; margin-top: 1rem;">
 <button type="button" class="btn btn-info" onclick="adicionarServico()">
 <i class="fas fa-plus"></i> Adicionar Serviço
 </button>
+<button type="button" class="btn btn-success" onclick="adicionarServicoRapido()">
+<i class="fas fa-bolt"></i> Adicionar Rápido
+</button>
+</div>
+<div id="alerta-servicos" style="display: none;" class="alert alert-info">
+<i class="fas fa-info-circle"></i> 
+<strong>Dica:</strong> Selecione um serviço acima e clique em "Adicionar Serviço" para incluí-lo na lista. Você pode adicionar vários serviços antes de enviar a tarefinha.
+</div>
 </div>
 
 <div class="total-section">
@@ -880,6 +910,7 @@ function adicionarServico() {
   
   if (!servicoSelecionado) {
     mostrarNotificacao('Selecione um serviço primeiro!', 'warning');
+    mostrarAlertaServicos();
     return;
   }
   
@@ -900,7 +931,36 @@ function adicionarServico() {
   // Limpar seleção
   servicoSelect.value = '';
   
+  // Esconder alerta se houver serviços
+  esconderAlertaServicos();
+  
   mostrarNotificacao('Serviço adicionado com sucesso!', 'success');
+}
+
+// Função para adicionar serviço rapidamente (sem precisar clicar no botão)
+function adicionarServicoRapido() {
+  const servicoSelect = document.getElementById('servico');
+  if (servicoSelect.value) {
+    adicionarServico();
+  } else {
+    mostrarNotificacao('Selecione um serviço primeiro!', 'warning');
+    mostrarAlertaServicos();
+  }
+}
+
+// Função para mostrar alerta sobre como adicionar serviços
+function mostrarAlertaServicos() {
+  const alerta = document.getElementById('alerta-servicos');
+  alerta.style.display = 'block';
+  setTimeout(() => {
+    esconderAlertaServicos();
+  }, 5000);
+}
+
+// Função para esconder alerta sobre serviços
+function esconderAlertaServicos() {
+  const alerta = document.getElementById('alerta-servicos');
+  alerta.style.display = 'none';
 }
 
 // Função para remover serviço da lista
@@ -957,7 +1017,8 @@ async function enviarTarefa(event) {
   }
   
   if (servicosSelecionados.length === 0) {
-    mostrarNotificacao('Adicione pelo menos um serviço!', 'error');
+    mostrarNotificacao('Você precisa adicionar pelo menos um serviço à lista! Selecione um serviço e clique em "Adicionar Serviço".', 'error');
+    mostrarAlertaServicos();
     return;
   }
   
@@ -987,6 +1048,7 @@ async function enviarTarefa(event) {
     valorTotal = 0;
     atualizarListaServicos();
     calcularTotal();
+    esconderAlertaServicos();
     
     // Atualizar lista de ordens se estiver visível
     if (document.getElementById('todas-ordens').classList.contains('active')) {
@@ -1187,10 +1249,18 @@ function mostrarNotificacao(mensagem, tipo = 'info') {
   }, 5000);
 }
 
-// Definir data atual como padrão
+// Adicionar evento de tecla Enter para adicionar serviço rapidamente
 document.addEventListener('DOMContentLoaded', function() {
   const hoje = new Date().toISOString().split('T')[0];
   document.getElementById('data').value = hoje;
+  
+  // Adicionar evento para tecla Enter no select de serviço
+  document.getElementById('servico').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      adicionarServicoRapido();
+    }
+  });
 });
 </script>
 </body>

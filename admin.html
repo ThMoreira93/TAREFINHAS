@@ -857,8 +857,10 @@
     /* Responsive Design */
     @media (max-width: 768px) {
       .sidebar {
-        width: 100%;
+        width: 280px;
         transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
       }
       
       .sidebar.open {
@@ -874,6 +876,46 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
+        position: relative;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: var(--primary-500);
+        color: white;
+        border: none;
+        border-radius: var(--radius-lg);
+        padding: 0.75rem;
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: var(--shadow-md);
+        z-index: 1001;
+      }
+      
+      .mobile-menu-btn:hover {
+        background: var(--primary-600);
+      }
+      
+      .sidebar-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-speed) ease;
+      }
+      
+      .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
       }
       
       .kpi-cards {
@@ -890,6 +932,27 @@
       
       .filter-group {
         min-width: auto;
+      }
+      
+      .nav-item a {
+        padding: 1.25rem 1.5rem;
+        font-size: 1.1rem;
+      }
+      
+      .nav-item i {
+        font-size: 1.3rem;
+        margin-right: 1.25rem;
+      }
+    }
+    
+    /* Desktop - esconder botão mobile */
+    @media (min-width: 769px) {
+      .mobile-menu-btn {
+        display: none;
+      }
+      
+      .sidebar-overlay {
+        display: none;
       }
     }
     
@@ -959,8 +1022,11 @@
 
 <!-- Painel Principal -->
 <div id="admin-panel" class="app-container hidden">
+  <!-- Overlay para mobile -->
+  <div class="sidebar-overlay" onclick="fecharMenuMobile()"></div>
+  
   <!-- Barra lateral -->
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="logo">
         <i class="fas fa-star" style="font-size: 24px; color: white;"></i>
@@ -969,23 +1035,23 @@
     </div>
     
     <nav class="sidebar-nav">
-      <a href="#" class="nav-item active" onclick="mostrarSecao('dashboard')">
+      <a href="#" class="nav-item active" onclick="mostrarSecao('dashboard'); fecharMenuMobile();">
         <i class="fas fa-chart-pie"></i>
         <span>Dashboard</span>
       </a>
-      <a href="#" class="nav-item" onclick="mostrarSecao('ordens')">
+      <a href="#" class="nav-item" onclick="mostrarSecao('ordens'); fecharMenuMobile();">
         <i class="fas fa-list-alt"></i>
         <span>Ordens de Serviço</span>
       </a>
-      <a href="#" class="nav-item" onclick="mostrarSecao('gerenciar-tarefas')">
+      <a href="#" class="nav-item" onclick="mostrarSecao('gerenciar-tarefas'); fecharMenuMobile();">
         <i class="fas fa-tasks"></i>
         <span>Gerenciar Tarefas</span>
       </a>
-      <a href="#" class="nav-item" onclick="mostrarSecao('colaboradores')">
+      <a href="#" class="nav-item" onclick="mostrarSecao('colaboradores'); fecharMenuMobile();">
         <i class="fas fa-users"></i>
         <span>Colaboradores</span>
       </a>
-      <a href="#" class="nav-item" onclick="mostrarSecao('relatorios')">
+      <a href="#" class="nav-item" onclick="mostrarSecao('relatorios'); fecharMenuMobile();">
         <i class="fas fa-file-alt"></i>
         <span>Relatórios</span>
       </a>
@@ -1011,6 +1077,11 @@
     <!-- Dashboard -->
     <div id="dashboard-section" class="section">
       <div class="content-header">
+        <!-- Botão de menu mobile -->
+        <button class="mobile-menu-btn" onclick="abrirMenuMobile()">
+          <i class="fas fa-bars"></i>
+        </button>
+        
         <div class="page-title">
           <h2><i class="fas fa-chart-pie"></i> Dashboard</h2>
           <div class="breadcrumb">Painel Principal / Dashboard</div>
@@ -1043,7 +1114,7 @@
           </div>
           <div class="kpi-content">
             <div class="kpi-title">Valor Total</div>
-            <div class="kpi-value" id="valor-total-dashboard">R$ 0,00</div>
+            <div class="kpi-value" id="valor-total">R$ 0,00</div>
             <div class="kpi-change positive">
               <i class="fas fa-arrow-up"></i> Acumulado
             </div>
@@ -1059,6 +1130,19 @@
             <div class="kpi-value" id="tarefas-pagas">0</div>
             <div class="kpi-change positive">
               <i class="fas fa-arrow-up"></i> Concluídas
+            </div>
+          </div>
+        </div>
+        
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, var(--warning), var(--secondary-600));">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-title">Tarefas Pendentes</div>
+            <div class="kpi-value" id="tarefas-pendentes">0</div>
+            <div class="kpi-change">
+              <i class="fas fa-clock"></i> Aguardando
             </div>
           </div>
         </div>
@@ -1533,6 +1617,21 @@ const usuarios = {
   }
 };
 
+// Função para mostrar painel admin
+function mostrarPainelAdmin() {
+  // Atualizar informações do usuário na interface
+  document.getElementById('user-name').textContent = usuarioLogado.nome;
+  document.getElementById('user-role').textContent = usuarioLogado.funcao;
+  document.getElementById('user-avatar').textContent = usuarioLogado.avatar;
+  
+  // Esconder tela de login e mostrar painel
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('admin-panel').classList.remove('hidden');
+  
+  // Carregar dashboard inicial
+  atualizarDashboard();
+}
+
 // Função de login
 function fazerLogin(event) {
   event.preventDefault();
@@ -1543,17 +1642,7 @@ function fazerLogin(event) {
   if (usuarios[usuario] && usuarios[usuario].senha === senha) {
     usuarioLogado = usuarios[usuario];
     
-    // Atualizar informações do usuário na interface
-    document.getElementById('user-name').textContent = usuarioLogado.nome;
-    document.getElementById('user-role').textContent = usuarioLogado.funcao;
-    document.getElementById('user-avatar').textContent = usuarioLogado.avatar;
-    
-    // Esconder tela de login e mostrar painel
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('admin-panel').classList.remove('hidden');
-    
-    // Carregar dashboard inicial
-    atualizarDashboard();
+    mostrarPainelAdmin();
     
     mostrarNotificacao(`Bem-vindo(a), ${usuarioLogado.nome}!`, 'success');
   } else {
@@ -1607,12 +1696,18 @@ function mostrarSecao(secao) {
 // Função para atualizar dashboard
 async function atualizarDashboard() {
   try {
+    // Mostrar loading nos KPIs
+    document.getElementById('total-tarefas').textContent = '...';
+    document.getElementById('valor-total').textContent = '...';
+    document.getElementById('tarefas-pagas').textContent = '...';
+    document.getElementById('tarefas-pendentes').textContent = '...';
+    
     const snapshot = await db.collection('tarefas').get();
     
     let totalTarefas = 0;
     let valorTotal = 0;
     let tarefasPagas = 0;
-    let tarefasCanceladas = 0;
+    let tarefasPendentes = 0;
     
     const colaboradores = {
       'Débora': { tarefas: 0, valor: 0 },
@@ -1630,31 +1725,41 @@ async function atualizarDashboard() {
     snapshot.forEach(doc => {
       const tarefa = doc.data();
       totalTarefas++;
-      valorTotal += tarefa.valorTotal;
+      valorTotal += tarefa.valorTotal || 0;
       
-      if (tarefa.status === 'PAGO') tarefasPagas++;
-      if (tarefa.status === 'CANCELADO') tarefasCanceladas++;
+      if (tarefa.status === 'PAGO') {
+        tarefasPagas++;
+      } else if (tarefa.status === 'PENDENTE') {
+        tarefasPendentes++;
+      }
       
-      statusCount[tarefa.status]++;
+      statusCount[tarefa.status] = (statusCount[tarefa.status] || 0) + 1;
       
       if (colaboradores[tarefa.colaborador]) {
         colaboradores[tarefa.colaborador].tarefas++;
-        colaboradores[tarefa.colaborador].valor += tarefa.valorTotal;
+        colaboradores[tarefa.colaborador].valor += tarefa.valorTotal || 0;
       }
     });
     
     // Atualizar KPIs
     document.getElementById('total-tarefas').textContent = totalTarefas;
-    document.getElementById('valor-total-dashboard').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
+    document.getElementById('valor-total').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
     document.getElementById('tarefas-pagas').textContent = tarefasPagas;
-    document.getElementById('tarefas-canceladas').textContent = tarefasCanceladas;
+    document.getElementById('tarefas-pendentes').textContent = tarefasPendentes;
     
     // Atualizar gráficos
     atualizarGraficoRanking(colaboradores);
     atualizarGraficoStatus(statusCount);
     
   } catch (error) {
-    console.error('Erro ao atualizar dashboard:', error);
+    console.error('Erro ao carregar dashboard:', error);
+    
+    // Mostrar valores padrão em caso de erro
+    document.getElementById('total-tarefas').textContent = '0';
+    document.getElementById('valor-total').textContent = 'R$ 0,00';
+    document.getElementById('tarefas-pagas').textContent = '0';
+    document.getElementById('tarefas-pendentes').textContent = '0';
+    
     mostrarNotificacao('Erro ao carregar dados do dashboard', 'error');
   }
 }
@@ -2257,8 +2362,138 @@ window.onclick = function(event) {
   }
 }
 
+// Função para mostrar a tela de login
+function mostrarTelaLogin() {
+  document.getElementById("login-screen").style.display = "flex";
+  document.getElementById("admin-panel").style.display = "none";
+}
+
+// Funções para menu mobile
+function abrirMenuMobile() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.querySelector('.sidebar-overlay');
+  
+  sidebar.classList.add('open');
+  overlay.classList.add('active');
+}
+
+function fecharMenuMobile() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.querySelector('.sidebar-overlay');
+  
+  sidebar.classList.remove('open');
+  overlay.classList.remove('active');
+}
+
+// Funções de sessão corrigidas
+function salvarSessao(usuario) {
+  const sessao = {
+    usuario: usuario,
+    timestamp: new Date().getTime()
+  };
+  localStorage.setItem('minhasTarefinhas_session', JSON.stringify(sessao));
+}
+
+function verificarSessaoSalva() {
+  try {
+    const sessaoSalva = localStorage.getItem('minhasTarefinhas_session');
+    
+    if (!sessaoSalva) {
+      return false;
+    }
+    
+    const sessao = JSON.parse(sessaoSalva);
+    const agora = new Date().getTime();
+    const tempoExpiracao = 30 * 60 * 1000; // 30 minutos em milissegundos
+    
+    // Verificar se a sessão expirou
+    if (agora - sessao.timestamp > tempoExpiracao) {
+      localStorage.removeItem('minhasTarefinhas_session');
+      return false;
+    }
+    
+    // Sessão válida - restaurar usuário logado
+    usuarioLogado = sessao.usuario;
+    
+    // Atualizar informações do usuário na interface
+    document.getElementById('user-name').textContent = usuarioLogado.nome;
+    document.getElementById('user-role').textContent = usuarioLogado.funcao;
+    document.getElementById('user-avatar').textContent = usuarioLogado.avatar;
+    
+    // Esconder tela de login e mostrar painel
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('admin-panel').classList.remove('hidden');
+    
+    // Carregar dashboard inicial
+    atualizarDashboard();
+    
+    return true;
+    
+  } catch (error) {
+    console.error('Erro ao verificar sessão:', error);
+    localStorage.removeItem('minhasTarefinhas_session');
+    return false;
+  }
+}
+
+function fazerLogout() {
+  localStorage.removeItem('minhasTarefinhas_session');
+  usuarioLogado = null;
+  mostrarTelaLogin();
+  mostrarNotificacao('Logout realizado com sucesso!', 'success');
+}
+
+// Função para fazer login (corrigida)
+function fazerLogin(event) {
+  if (event) {
+    event.preventDefault();
+  }
+  
+  const usuario = document.getElementById('usuario').value.trim();
+  const senha = document.getElementById('senha').value.trim();
+  
+  if (!usuario || !senha) {
+    mostrarNotificacao('Preencha usuário e senha!', 'error');
+    return;
+  }
+  
+  // Verificar credenciais
+  const usuarios = {
+    'PAPAI': { senha: 'PAPAI', nome: 'THIAGO MOREIRA', funcao: 'PAI', avatar: 'P' },
+    'MAMÃE': { senha: 'MAMÃE', nome: 'LETÍCIA BISPO', funcao: 'MAMÃE', avatar: 'M' }
+  };
+  
+  if (usuarios[usuario] && usuarios[usuario].senha === senha) {
+    usuarioLogado = {
+      usuario: usuario,
+      nome: usuarios[usuario].nome,
+      funcao: usuarios[usuario].funcao,
+      avatar: usuarios[usuario].avatar
+    };
+    
+    // Salvar sessão
+    salvarSessao(usuarioLogado);
+    
+    // Atualizar informações do usuário na interface
+    document.getElementById('user-name').textContent = usuarioLogado.nome;
+    document.getElementById('user-role').textContent = usuarioLogado.funcao;
+    document.getElementById('user-avatar').textContent = usuarioLogado.avatar;
+    
+    // Esconder tela de login e mostrar painel
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('admin-panel').classList.remove('hidden');
+    
+    // Carregar dashboard inicial
+    atualizarDashboard();
+    
+    mostrarNotificacao(`Bem-vindo(a), ${usuarioLogado.nome}!`, 'success');
+  } else {
+    mostrarNotificacao('Usuário ou senha incorretos!', 'error');
+  }
+}
+
 // Inicialização
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function() {
   // Verificar se há sessão salva
   if (!verificarSessaoSalva()) {
     // Se não há sessão válida, mostrar tela de login
@@ -2269,8 +2504,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const hoje = new Date();
   const umMesAtras = new Date(hoje.getFullYear(), hoje.getMonth() - 1, hoje.getDate());
   
-  document.getElementById('relatorio-data-inicio').value = umMesAtras.toISOString().split('T')[0];
-  document.getElementById('relatorio-data-fim').value = hoje.toISOString().split('T')[0];
+  document.getElementById("relatorio-data-inicio").value = umMesAtras.toISOString().split("T")[0];
+  document.getElementById("relatorio-data-fim").value = hoje.toISOString().split("T")[0];
 });
 </script>
 </body>

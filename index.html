@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Minhas Tarefinhas</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<style>
+    :root {
+      /* Cores infantis e femininas */
+      --primary-50: #fdf2f8;
+      --primary-100: #fce7f3;
+      --primary-200: #fbcfe8;
+      --primary-300: #f9a8d4;
+      --primary-400: #f472b6;
+      --primary-500: #ec4899;  /* Rosa principal */
+      --primary-600: #db2777;
+      --primary-700: #be185d;
+      --primary-800: #9d174d;
+      --primary-900: #831843;
+      
+      /* Cores secundárias */
+      --secondary-50: #fefce8;
+      --secondary-100: #fef9c3;
+      --secondary-200: #fef08a;
+      --secondary-300: #fde047;
+      --secondary-400: #facc15;
+      --secondary-500: #eab308;  /* Amarelo para destaque */
+      --secondary-600: #ca8a04;
+      --secondary-700: #a16207;
+      --secondary-800: #854d0e;
+      --secondary-900: #713f12;
+      
+      /* Cores terciárias */
+      --tertiary-50: #f0f9ff;
+      --tertiary-100: #e0f2fe;
+      --tertiary-200: #bae6fd;
+      --tertiary-300: #7dd3fc;
+      --tertiary-400: #38bdf8;
+      --tertiary-500: #0ea5e9;  /* Azul claro */
+      --tertiary-600: #0284c7;
+      --tertiary-700: #0369a1;
+      --tertiary-800: #075985;
+      --tertiary-900: #0c4a6e;
+      
+      /* Cores neutras */
+      --neutral-50: #fafafa;
+      --neutral-100: #f5f5f5;
+      --neutral-200: #e5e5e5;
+      --neutral-300: #d4d4d4;
+      --neutral-400: #a3a3a3;
+      --neutral-500: #737373;
+      --neutral-600: #525252;
+      --neutral-700: #404040;
+      --neutral-800: #262626;
+      --neutral-900: #171717;
+      
+      /* Cores de status */
+      --status-pending: var(--secondary-500);
+      --status-paid: #10b981;
+      --status-canceled: #ef4444;
+      
+      /* Cores de feedback */
+      --success: #10b981;
+      --warning: var(--secondary-500);
+      --error: #ef4444;
+      --info: var(--tertiary-500);
+      
+      /* Sombras */
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      
+      /* Bordas */
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-2xl: 1.5rem;
+      
+      /* Transições */
+      --transition-speed: 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--primary-50) 0%, var(--tertiary-50) 50%, var(--secondary-50) 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      color: var(--neutral-800);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--neutral-800);
+    }
+
+    .header-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      border-radius: var(--radius-2xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      box-shadow: var(--shadow-lg);
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .header h1 {
+      font-family: 'Fredoka', cursive;
+      font-size: 3rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      background: linear-gradient(135deg, var(--primary-600), var(--tertiary-600));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+      margin: 0;
+      font-weight: 400;
+      color: var(--neutral-600);
+    }
+
+    .main-card {
+      background: white;
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      margin-bottom: 2rem;
+      border: 3px solid var(--primary-100);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      color: white;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--primary-200);
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-family: 'Fredoka', cursive;
+      font-size: 1.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card-body {
+      padding: 2rem;
+      background: linear-gradient(135deg, #ffffff 0%, var(--primary-50) 100%);
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.half {
+      grid-column: span 1;
+    }
+
+    .form-group.full {
+      grid-column: span 2;
+    }
+
+    @media (min-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--neutral-700);
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Fredoka', cursive;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      border: 2px solid var(--primary-200);
+      border-radius: var(--radius-lg);
+      font-size: 1rem;
+      font-family: inherit;
+      background: white;
+      color: var(--neutral-800);
+      transition: all var(--transition-speed) ease;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+      transform: translateY(-2px);
+    }
+
+    input:hover, select:hover, textarea:hover {
+      border-color: var(--primary-400);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary-400);
+      pointer-events: none;
+      font-size: 1.1rem;
+    }
+
+    .input-with-icon {
+      padding-left: 3rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-size: 1.1rem;
+      font-weight: 600;
+      font-family: 'Fredoka', cursive;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+    }
+
+    .btn-info {
+      background: linear-gradient(135deg, var(--tertiary-500), var(--tertiary-600));
+      color: white;
+    }
+
+    .btn-info:hover {
+      background: linear-gradient(135deg, var(--tertiary-600), var(--tertiary-700));
+    }
+
+    .services-section {
+      margin-top: 2rem;
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      border: 2px solid var(--secondary-200);
+      box-shadow: var(--shadow-md);
+    }
+
+    .services-section h3 {
+      margin: 0 0 1rem 0;
+      color: var(--neutral-800);
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Fredoka', cursive;
+    }
+
+    .service-item {
+      background: linear-gradient(135deg, var(--secondary-50), white);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid var(--secondary-200);
+      transition: all var(--transition-speed) ease;
+      cursor: pointer;
+    }
+
+    .service-item:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      border-color: var(--secondary-400);
+    }
+
+    .service-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .service-info {
+      flex: 1;
+      font-size: 1rem;
+      color: var(--neutral-700);
+      font-weight: 500;
+    }
+
+    .service-price {
+      font-weight: 700;
+      color: var(--primary-600);
+      font-size: 1.1rem;
+      font-family: 'Fredoka', cursive;
+    }
+
+    .total-section {
+      background: linear-gradient(135deg, var(--primary-100), var(--primary-50));
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      border: 2px solid var(--primary-300);
+      text-align: center;
+    }
+
+    .total-label {
+      font-size: 1.2rem;
+      color: var(--neutral-700);
+      margin-bottom: 0.5rem;
+      font-family: 'Fredoka', cursive;
+      font-weight: 600;
+    }
+
+    .total-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-600);
+      font-family: 'Fredoka', cursive;
+    }
+
+    .consultation-section {
+      background: white;
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      border: 3px solid var(--tertiary-100);
+    }
+
+    .consultation-header {
+      background: linear-gradient(135deg, var(--tertiary-500), var(--tertiary-600));
+      color: white;
+      padding: 1.5rem 2rem;
+    }
+
+    .consultation-header h2 {
+      margin: 0;
+      font-family: 'Fredoka', cursive;
+      font-size: 1.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .consultation-body {
+      padding: 2rem;
+      background: linear-gradient(135deg, #ffffff 0%, var(--tertiary-50) 100%);
+    }
+    
+    .consultation-tabs {
+      display: flex;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--tertiary-200);
+      gap: 0.5rem;
+    }
+    
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--tertiary-100);
+      border: none;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      font-family: 'Fredoka', cursive;
+      color: var(--neutral-700);
+    }
+    
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--tertiary-500), var(--tertiary-600));
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+
+    .result-card {
+      background: linear-gradient(135deg, var(--secondary-50), white);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      border-left: 4px solid var(--secondary-500);
+      margin-top: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .order-item {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid var(--primary-100);
+      transition: all var(--transition-speed) ease;
+      cursor: pointer;
+    }
+    
+    .order-item:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      border-color: var(--primary-300);
+    }
+    
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .order-number {
+      font-weight: 700;
+      color: var(--primary-600);
+      font-size: 1.2rem;
+      font-family: 'Fredoka', cursive;
+    }
+    
+    .order-date {
+      font-size: 0.9rem;
+      color: var(--neutral-500);
+      font-weight: 500;
+    }
+    
+    .order-status {
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-lg);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      line-height: 1.5;
+      font-family: 'Fredoka', cursive;
+    }
+    
+    .badge-pending {
+      background: linear-gradient(135deg, var(--secondary-400), var(--secondary-500));
+      color: white;
+    }
+    
+    .badge-paid {
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: white;
+    }
+    
+    .badge-canceled {
+      background: linear-gradient(135deg, var(--error), #dc2626);
+      color: white;
+    }
+    
+    .order-details {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: var(--neutral-600);
+    }
+    
+    .order-details strong {
+      color: var(--neutral-800);
+      font-weight: 600;
+    }
+    
+    .empty-result {
+      text-align: center;
+      padding: 3rem;
+      color: var(--neutral-400);
+      font-size: 1.1rem;
+    }
+
+    .result-card h4 {
+      margin: 0 0 1rem 0;
+      color: var(--neutral-800);
+      font-weight: 600;
+      font-family: 'Fredoka', cursive;
+    }
+
+    .result-card p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+
+    .result-card strong {
+      color: var(--neutral-800);
+      font-weight: 600;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 1.5rem;
+      height: 1.5rem;
+      border: 3px solid var(--primary-200);
+      border-top: 3px solid var(--primary-500);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+      }
+
+      .card-body, .consultation-body {
+        padding: 1.5rem;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.half,
+      .form-group.full {
+        grid-column: span 1;
+      }
+
+      .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+
+      .service-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .consultation-tabs {
+        flex-direction: column;
+      }
+      
+      .tab-btn {
+        border-radius: var(--radius-lg);
+        width: 100%;
+        text-align: left;
+      }
+
+      .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+
+    /* Animações especiais */
+    .sparkle {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sparkle::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: rotate(45deg);
+      animation: sparkle 3s infinite;
+    }
+
+    @keyframes sparkle {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+      100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<div class="header-icon sparkle">
+<i class="fas fa-star" style="font-size: 40px; color: white;"></i>
+</div>
+<h1>Minhas Tarefinhas</h1>
+<p>Sistema de Gerenciamento de Tarefas Infantis</p>
+</div>
+
+<div class="main-card">
+<div class="card-header">
+<h2><i class="fas fa-plus-circle"></i> Lançar Nova Tarefinha</h2>
+</div>
+<div class="card-body">
+<form onsubmit="enviarTarefa(event)">
+<div class="form-grid">
+<div class="form-group half">
+<label for="colaborador">
+<i class="fas fa-user-friends"></i>
+                Colaborador
+              </label>
+<div class="input-wrapper">
+<i class="fas fa-child input-icon"></i>
+<select class="input-with-icon" id="colaborador" required>
+<option value="">Selecione o colaborador</option>
+<option value="Débora">Débora</option>
+<option value="Ruth">Ruth</option>
+<option value="Laura">Laura</option>
+<option value="Agatha">Agatha</option>
+</select>
+</div>
+</div>
+
+<div class="form-group half">
+<label for="data">
+<i class="fas fa-calendar-alt"></i>
+                Data
+              </label>
+<div class="input-wrapper">
+<i class="fas fa-calendar input-icon"></i>
+<input class="input-with-icon" id="data" required type="date"/>
+</div>
+</div>
+
+<div class="form-group full">
+<label for="servico">
+<i class="fas fa-tasks"></i>
+                Serviço
+              </label>
+<div class="input-wrapper">
+<i class="fas fa-broom input-icon"></i>
+<select class="input-with-icon" id="servico" required onchange="calcularTotal()">
+<option value="">Selecione o serviço</option>
+<option value="Dobrar roupas" data-price="0.25">Dobrar roupas - R$ 0,25</option>
+<option value="Varrer a casa e passar pano" data-price="0.50">Varrer a casa e passar pano - R$ 0,50</option>
+<option value="Lavar os pratos" data-price="0.75">Lavar os pratos - R$ 0,75</option>
+<option value="Organizar os brinquedos" data-price="0.10">Organizar os brinquedos - R$ 0,10</option>
+<option value="Lavar banheiro" data-price="2.00">Lavar banheiro - R$ 2,00</option>
+<option value="Lavar roupa" data-price="0.50">Lavar roupa - R$ 0,50</option>
+<option value="Lavar a geladeira" data-price="2.00">Lavar a geladeira - R$ 2,00</option>
+<option value="Arrumar as compras" data-price="1.00">Arrumar as compras - R$ 1,00</option>
+</select>
+</div>
+</div>
+</div>
+
+<div class="services-section">
+<h3><i class="fas fa-list-check"></i> Serviços Selecionados</h3>
+<div id="servicos-selecionados">
+<p style="text-align: center; color: var(--neutral-400); font-style: italic;">Nenhum serviço selecionado ainda</p>
+</div>
+<button type="button" class="btn btn-info" onclick="adicionarServico()">
+<i class="fas fa-plus"></i> Adicionar Serviço
+</button>
+</div>
+
+<div class="total-section">
+<div class="total-label">Valor Total</div>
+<div class="total-value" id="valor-total">R$ 0,00</div>
+</div>
+
+<div style="margin-top: 2rem; text-align: center;">
+<button type="submit" class="btn btn-primary sparkle">
+<i class="fas fa-paper-plane"></i> Lançar Tarefinha
+</button>
+</div>
+</form>
+</div>
+</div>
+
+<div class="consultation-section">
+<div class="consultation-header">
+<h2><i class="fas fa-search"></i> Consultar Ordens de Serviço</h2>
+</div>
+<div class="consultation-body">
+<div class="consultation-tabs">
+<button class="tab-btn active" onclick="abrirTab(event, 'todas-ordens')">Todas as Ordens</button>
+<button class="tab-btn" onclick="abrirTab(event, 'buscar-ordem')">Buscar por Número</button>
+</div>
+
+<div id="todas-ordens" class="tab-content active">
+<div style="margin-bottom: 1.5rem;">
+<div style="display: flex; gap: 1rem; align-items: end; flex-wrap: wrap;">
+<div style="flex: 1; min-width: 200px;">
+<label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--neutral-700); font-family: 'Fredoka', cursive;">
+<i class="fas fa-user-friends"></i> Filtrar por Colaborador
+</label>
+<select id="filtro-colaborador-consulta" onchange="aplicarFiltroConsulta()" style="width: 100%; padding: 0.75rem 1rem; border: 2px solid var(--tertiary-200); border-radius: var(--radius-lg); font-size: 1rem; background: white;">
+<option value="">Todos os colaboradores</option>
+<option value="Débora">Débora</option>
+<option value="Ruth">Ruth</option>
+<option value="Laura">Laura</option>
+<option value="Agatha">Agatha</option>
+</select>
+</div>
+<div>
+<button class="btn btn-info" onclick="carregarTodasOrdens()">
+<i class="fas fa-sync-alt"></i> Atualizar Lista
+</button>
+</div>
+</div>
+<div id="resumo-consulta" style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, var(--secondary-50), white); border-radius: var(--radius-lg); border: 2px solid var(--secondary-200); display: none;">
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+<div>
+<span style="font-weight: 600; color: var(--neutral-700); font-family: 'Fredoka', cursive;">
+<i class="fas fa-list"></i> Total de Ordens: <span id="total-ordens-filtradas">0</span>
+</span>
+</div>
+<div>
+<span style="font-weight: 600; color: var(--primary-600); font-family: 'Fredoka', cursive; font-size: 1.2rem;">
+<i class="fas fa-dollar-sign"></i> Valor Total: <span id="valor-total-filtrado">R$ 0,00</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+<div id="lista-ordens">
+<div class="empty-result">
+<i class="fas fa-clipboard-list" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+<p>Clique em "Atualizar Lista" para ver todas as ordens de serviço</p>
+</div>
+</div>
+</div>
+
+<div id="buscar-ordem" class="tab-content">
+<div class="form-group">
+<label for="numero-ordem">
+<i class="fas fa-hashtag"></i>
+              Número da Ordem de Serviço
+            </label>
+<div class="input-wrapper">
+<i class="fas fa-search input-icon"></i>
+<input class="input-with-icon" id="numero-ordem" placeholder="Digite o número da ordem" type="text"/>
+</div>
+</div>
+<button class="btn btn-primary" onclick="buscarOrdem()">
+<i class="fas fa-search"></i> Buscar Ordem
+</button>
+<div id="resultado-busca"></div>
+</div>
+</div>
+</div>
+
+<!-- Container para notificações -->
+<div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
+</div>
+
+<script>
+// Configuração do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDPaV5FKs-cjKDwH6lQ9Ugk9PQBHtxEc_U",
+  authDomain: "tarefas-tsm.firebaseapp.com",
+  projectId: "tarefas-tsm",
+  storageBucket: "tarefas-tsm.firebasestorage.app",
+  messagingSenderId: "395195955865",
+  appId: "1:395195955865:web:6affeb07786e8198bdd608",
+  measurementId: "G-LS9KLQPPNQ"
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// Variáveis globais
+let servicosSelecionados = [];
+let valorTotal = 0;
+let todasOrdensCarregadas = [];
+let ordensFiltradas = [];
+
+// Função para gerar número de ordem aleatório
+function gerarNumeroOrdem() {
+  return Math.floor(Math.random() * 900000) + 100000; // Gera número de 6 dígitos
+}
+
+// Função para adicionar serviço à lista
+function adicionarServico() {
+  const servicoSelect = document.getElementById('servico');
+  const servicoSelecionado = servicoSelect.value;
+  const preco = parseFloat(servicoSelect.options[servicoSelect.selectedIndex].dataset.price);
+  
+  if (!servicoSelecionado) {
+    mostrarNotificacao('Selecione um serviço primeiro!', 'warning');
+    return;
+  }
+  
+  // Verificar se o serviço já foi adicionado
+  if (servicosSelecionados.find(s => s.nome === servicoSelecionado)) {
+    mostrarNotificacao('Este serviço já foi adicionado!', 'warning');
+    return;
+  }
+  
+  servicosSelecionados.push({
+    nome: servicoSelecionado,
+    preco: preco
+  });
+  
+  atualizarListaServicos();
+  calcularTotal();
+  
+  // Limpar seleção
+  servicoSelect.value = '';
+  
+  mostrarNotificacao('Serviço adicionado com sucesso!', 'success');
+}
+
+// Função para remover serviço da lista
+function removerServico(index) {
+  servicosSelecionados.splice(index, 1);
+  atualizarListaServicos();
+  calcularTotal();
+  mostrarNotificacao('Serviço removido!', 'info');
+}
+
+// Função para atualizar a lista de serviços selecionados
+function atualizarListaServicos() {
+  const container = document.getElementById('servicos-selecionados');
+  
+  if (servicosSelecionados.length === 0) {
+    container.innerHTML = '<p style="text-align: center; color: var(--neutral-400); font-style: italic;">Nenhum serviço selecionado ainda</p>';
+    return;
+  }
+  
+  let html = '';
+  servicosSelecionados.forEach((servico, index) => {
+    html += `
+      <div class="service-item">
+        <div class="service-info">${servico.nome}</div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="service-price">R$ ${servico.preco.toFixed(2).replace('.', ',')}</div>
+          <button type="button" class="btn" style="background: var(--error); color: white; padding: 0.5rem;" onclick="removerServico(${index})">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
+}
+
+// Função para calcular o total
+function calcularTotal() {
+  valorTotal = servicosSelecionados.reduce((total, servico) => total + servico.preco, 0);
+  document.getElementById('valor-total').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
+}
+
+// Função para enviar tarefa
+async function enviarTarefa(event) {
+  event.preventDefault();
+  
+  const colaborador = document.getElementById('colaborador').value;
+  const data = document.getElementById('data').value;
+  
+  if (!colaborador || !data) {
+    mostrarNotificacao('Preencha o colaborador e a data!', 'error');
+    return;
+  }
+  
+  if (servicosSelecionados.length === 0) {
+    mostrarNotificacao('Adicione pelo menos um serviço!', 'error');
+    return;
+  }
+  
+  const numeroOrdem = gerarNumeroOrdem();
+  
+  const tarefa = {
+    numeroOrdem: numeroOrdem,
+    colaborador: colaborador,
+    data: data,
+    servicos: servicosSelecionados,
+    valorTotal: valorTotal,
+    status: 'PENDENTE',
+    dataLancamento: new Date().toISOString(),
+    justificativaCancelamento: null
+  };
+  
+  try {
+    await db.collection('tarefas').doc(numeroOrdem.toString()).set(tarefa);
+    
+    mostrarNotificacao(`Tarefinha lançada com sucesso! Número da ordem: ${numeroOrdem}`, 'success');
+    
+    // Limpar formulário
+    document.getElementById('colaborador').value = '';
+    document.getElementById('data').value = '';
+    document.getElementById('servico').value = '';
+    servicosSelecionados = [];
+    valorTotal = 0;
+    atualizarListaServicos();
+    calcularTotal();
+    
+    // Atualizar lista de ordens se estiver visível
+    if (document.getElementById('todas-ordens').classList.contains('active')) {
+      carregarTodasOrdens();
+    }
+    
+  } catch (error) {
+    console.error('Erro ao salvar tarefa:', error);
+    mostrarNotificacao('Erro ao salvar tarefa. Tente novamente.', 'error');
+  }
+}
+
+// Função para carregar todas as ordens
+async function carregarTodasOrdens() {
+  const container = document.getElementById('lista-ordens');
+  container.innerHTML = '<div style="text-align: center; padding: 2rem;"><div class="loading"></div><p>Carregando ordens...</p></div>';
+  
+  try {
+    const snapshot = await db.collection('tarefas').orderBy('dataLancamento', 'desc').get();
+    
+    todasOrdensCarregadas = [];
+    snapshot.forEach(doc => {
+      todasOrdensCarregadas.push(doc.data());
+    });
+    
+    aplicarFiltroConsulta();
+    
+  } catch (error) {
+    console.error('Erro ao carregar ordens:', error);
+    container.innerHTML = `
+      <div class="empty-result">
+        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--error);"></i>
+        <p>Erro ao carregar ordens. Tente novamente.</p>
+      </div>
+    `;
+  }
+}
+
+// Função para aplicar filtro de consulta
+function aplicarFiltroConsulta() {
+  const colaboradorSelecionado = document.getElementById('filtro-colaborador-consulta').value;
+  const container = document.getElementById('lista-ordens');
+  const resumoContainer = document.getElementById('resumo-consulta');
+  
+  // Filtrar ordens
+  if (colaboradorSelecionado) {
+    ordensFiltradas = todasOrdensCarregadas.filter(ordem => ordem.colaborador === colaboradorSelecionado);
+  } else {
+    ordensFiltradas = [...todasOrdensCarregadas];
+  }
+  
+  // Calcular totais
+  const totalOrdens = ordensFiltradas.length;
+  const valorTotalFiltrado = ordensFiltradas.reduce((total, ordem) => total + ordem.valorTotal, 0);
+  
+  // Atualizar resumo
+  if (totalOrdens > 0) {
+    document.getElementById('total-ordens-filtradas').textContent = totalOrdens;
+    document.getElementById('valor-total-filtrado').textContent = `R$ ${valorTotalFiltrado.toFixed(2).replace('.', ',')}`;
+    resumoContainer.style.display = 'block';
+  } else {
+    resumoContainer.style.display = 'none';
+  }
+  
+  // Exibir ordens filtradas
+  if (ordensFiltradas.length === 0) {
+    container.innerHTML = `
+      <div class="empty-result">
+        <i class="fas fa-clipboard-list" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+        <p>${colaboradorSelecionado ? `Nenhuma ordem encontrada para ${colaboradorSelecionado}` : 'Nenhuma ordem de serviço encontrada'}</p>
+      </div>
+    `;
+    return;
+  }
+  
+  let html = '';
+  ordensFiltradas.forEach(ordem => {
+    html += criarCardOrdem(ordem);
+  });
+  
+  container.innerHTML = html;
+}
+
+// Função para buscar ordem específica
+async function buscarOrdem() {
+  const numeroOrdem = document.getElementById('numero-ordem').value.trim();
+  const container = document.getElementById('resultado-busca');
+  
+  if (!numeroOrdem) {
+    mostrarNotificacao('Digite o número da ordem!', 'warning');
+    return;
+  }
+  
+  container.innerHTML = '<div style="text-align: center; padding: 2rem;"><div class="loading"></div><p>Buscando ordem...</p></div>';
+  
+  try {
+    const doc = await db.collection('tarefas').doc(numeroOrdem).get();
+    
+    if (!doc.exists) {
+      container.innerHTML = `
+        <div class="empty-result">
+          <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+          <p>Ordem de serviço não encontrada</p>
+        </div>
+      `;
+      return;
+    }
+    
+    const ordem = doc.data();
+    container.innerHTML = criarCardOrdem(ordem);
+    
+  } catch (error) {
+    console.error('Erro ao buscar ordem:', error);
+    container.innerHTML = `
+      <div class="empty-result">
+        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--error);"></i>
+        <p>Erro ao buscar ordem. Tente novamente.</p>
+      </div>
+    `;
+  }
+}
+
+// Função para criar card de ordem
+function criarCardOrdem(ordem) {
+  const statusClass = ordem.status === 'PAGO' ? 'badge-paid' : 
+                     ordem.status === 'CANCELADO' ? 'badge-canceled' : 'badge-pending';
+  
+  const servicosHtml = ordem.servicos.map(s => 
+    `<li>${s.nome} - R$ ${s.preco.toFixed(2).replace('.', ',')}</li>`
+  ).join('');
+  
+  const dataFormatada = new Date(ordem.data).toLocaleDateString('pt-BR');
+  
+  return `
+    <div class="order-item fade-in">
+      <div class="order-header">
+        <div class="order-number">#${ordem.numeroOrdem}</div>
+        <div class="order-date">${dataFormatada}</div>
+        <div class="order-status ${statusClass}">${ordem.status}</div>
+      </div>
+      <div class="order-details">
+        <p><strong>Colaborador:</strong> ${ordem.colaborador}</p>
+        <p><strong>Serviços:</strong></p>
+        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+          ${servicosHtml}
+        </ul>
+        <p><strong>Valor Total:</strong> R$ ${ordem.valorTotal.toFixed(2).replace('.', ',')}</p>
+        ${ordem.justificativaCancelamento ? `<p><strong>Justificativa do Cancelamento:</strong> ${ordem.justificativaCancelamento}</p>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+// Função para abrir tabs
+function abrirTab(evt, tabName) {
+  const tabcontent = document.getElementsByClassName("tab-content");
+  for (let i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].classList.remove("active");
+  }
+  
+  const tablinks = document.getElementsByClassName("tab-btn");
+  for (let i = 0; i < tablinks.length; i++) {
+    tablinks[i].classList.remove("active");
+  }
+  
+  document.getElementById(tabName).classList.add("active");
+  evt.currentTarget.classList.add("active");
+}
+
+// Função para mostrar notificações
+function mostrarNotificacao(mensagem, tipo = 'info') {
+  const container = document.getElementById('notification-container');
+  
+  const notification = document.createElement('div');
+  notification.className = `notification notification-${tipo}`;
+  
+  const icon = tipo === 'success' ? 'check-circle' : 
+               tipo === 'error' ? 'exclamation-circle' : 
+               tipo === 'warning' ? 'exclamation-triangle' : 'info-circle';
+  
+  notification.innerHTML = `
+    <div style="display: flex; align-items: center; padding: 1rem; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); border-left: 4px solid var(--${tipo === 'error' ? 'error' : tipo === 'warning' ? 'warning' : tipo === 'success' ? 'success' : 'info'});">
+      <i class="fas fa-${icon}" style="margin-right: 0.75rem; color: var(--${tipo === 'error' ? 'error' : tipo === 'warning' ? 'warning' : tipo === 'success' ? 'success' : 'info'}); font-size: 1.25rem;"></i>
+      <span style="color: var(--neutral-800); font-weight: 500;">${mensagem}</span>
+      <button onclick="this.parentElement.parentElement.remove()" style="margin-left: auto; background: none; border: none; color: var(--neutral-500); cursor: pointer; padding: 0.25rem;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  `;
+  
+  container.appendChild(notification);
+  
+  // Remover automaticamente após 5 segundos
+  setTimeout(() => {
+    if (notification.parentElement) {
+      notification.remove();
+    }
+  }, 5000);
+}
+
+// Definir data atual como padrão
+document.addEventListener('DOMContentLoaded', function() {
+  const hoje = new Date().toISOString().split('T')[0];
+  document.getElementById('data').value = hoje;
+});
+</script>
+</body>
+</html>
+
